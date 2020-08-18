@@ -7,3 +7,4 @@
 ## 언어들
 우선적으로 봇을 만들 때 사용할 언어들은 Python, JavaScript, Java, GOlang
 이 4가지가 되겠습니다.
+브랜치에 Py, JS, JAVA, GO 이 네가지는 각 언어별로 봇 코드들이 있으며, (고민 중)
