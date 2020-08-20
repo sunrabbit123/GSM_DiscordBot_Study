@@ -1,1 +1,0 @@
-# GOlang discord bot
