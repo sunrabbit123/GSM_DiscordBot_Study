@@ -17,4 +17,5 @@ client.on("ready", msg =>{
     else if(command === `띵동`){
         for(var i = 0; i<5; i++){
             msg.reply("띵동");}}
+    
 });
