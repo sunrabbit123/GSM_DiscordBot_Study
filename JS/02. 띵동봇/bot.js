@@ -2,6 +2,11 @@ const Discord = require("discord.js");
 const client = new Discord.Client;
 const prefix = "띵동 ";
 
+const mdbConn = require('./mariaDBconn.js');
+const express = require('express');
+const app = express();
+
+
 client.on("ready", () =>{
     console.log(`${client.user.tag}님이 봇에 로그인하였습니다.`);
 });
