@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const hook = new Discord.WebhookClient('746336318166138981', 'IhpONhZszvbvQEhium9Y6Xdo2jH_IVPRtK8JS4OU_O9wThBLJdoXMxjvbDur33X1_ePU');
