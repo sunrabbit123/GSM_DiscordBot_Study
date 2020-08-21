@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
+const hook = new Discord.WebhookClient('746336318166138981', 'IhpONhZszvbvQEhium9Y6Xdo2jH_IVPRtK8JS4OU_O9wThBLJdoXMxjvbDur33X1_ePU');
 const prefix = "띵동 ";
 
 const mdbConn = require('./mariaDBconn.js');
@@ -11,6 +12,7 @@ const _config = require('./config.js');
 
 client.on("ready", () => {
     console.log(`${client.user.tag}님이 봇에 로그인하였습니다.`);
+    //hook.send("공지사항"); 공지 용
 });
 
 client.on("message", msg => {
@@ -44,7 +46,8 @@ function clear(msg, args){
     }
 
 }
-
+// 웹훅
+// https://discordapp.com/api/webhooks/746336318166138981/IhpONhZszvbvQEhium9Y6Xdo2jH_IVPRtK8JS4OU_O9wThBLJdoXMxjvbDur33X1_ePU
 client.login(_config.BotToken());// run bot
 /*
 if (command === `임베드`) {
