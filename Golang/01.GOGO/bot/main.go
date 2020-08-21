@@ -25,6 +25,10 @@ var (
 )
 
 func main() {
+	startBot()
+}
+
+func startBot() {
 	dg, err := discordgo.New("Bot " + token.Token)
 	if err != nil {
 		fmt.Println("불일치 세션 생성 오류,", err)
@@ -49,10 +53,14 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if err != nil {
 		panic(err.Error())
 	}
+	defer func() {
+		recover()
+	}()
 	defer db.Close()
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
+
 	prefixFilter := strings.Fields(m.Content)
 	if string(prefixFilter[0]) == prefix {
 		var CReq string
@@ -67,22 +75,23 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "존재하지 않는 명령어입니다.")
 		}
 	}
+
 	addCommandFilter := strings.Fields(m.Content)
 	if string(addCommandFilter[0]) == addCommand {
-		fmt.Println(addCommandFilter)
 		_, err := db.Exec("INSERT INTO usercommand (CReq, CRes) VALUES (?, ?);", addCommandFilter[1], strings.Join(addCommandFilter[2:], " "))
 		if err != nil {
 			panic(err.Error())
 		}
 		s.ChannelMessageSend(m.ChannelID, "추가 완료!")
 	}
+
 	var userCReq string
 	userCommand := m.Content
 	_, userCommandErr := db.Exec("SELECT CRes FROM usercommand WHERE CReq = ?;", userCommand)
 	if userCommandErr == nil {
 		userCommandErr2 := db.QueryRow("SELECT CRes FROM usercommand WHERE CReq = ?;", userCommand).Scan(&userCReq)
 		if userCommandErr2 != nil {
-			panic(err.Error())
+			fmt.Println(err.Error())
 		}
 		s.ChannelMessageSend(m.ChannelID, userCReq)
 	}
