@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"token"
 
+	embed "github.com/Clinet/discordgo-embed"
 	"github.com/bwmarrin/discordgo"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -95,4 +96,8 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		s.ChannelMessageSend(m.ChannelID, userCReq)
 	}
+}
+
+func createEmbed(s *discordgo.Session, m *discordgo.Message) {
+	embed.NewEmbed()
 }
