@@ -1,1 +1,1 @@
-# JavaScript discord bot
+# Java discord bot
