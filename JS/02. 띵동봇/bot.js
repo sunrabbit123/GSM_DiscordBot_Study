@@ -29,6 +29,8 @@ client.on("message", msg => {
     else if(command === `띵동`){pong(msg);}
     
     else if(command === `청소`){clear(msg, args);}
+
+    else if(command === `굴러`){RollOver(msg);}
 });
 function ping(msg){//핑 찍어주는 함수
     msg.reply(`님의 핑은  ${client.ws.ping}ms입니당`);}
@@ -47,6 +49,9 @@ function clear(msg, args){
         msg.channel.bulkDelete(args[0]).then(msg.reply(`성공적으로 ${args[0]}만큼 값을 삭제하였습니다!`));
     }
 
+}
+function RollOver(msg){
+    msg.reply("띵동...?\n데구르르 데굴");
 }
 // 웹훅
 // https://discordapp.com/api/webhooks/746336318166138981/IhpONhZszvbvQEhium9Y6Xdo2jH_IVPRtK8JS4OU_O9wThBLJdoXMxjvbDur33X1_ePU
