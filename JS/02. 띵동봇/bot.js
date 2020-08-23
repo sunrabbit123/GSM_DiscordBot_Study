@@ -17,6 +17,27 @@ client.on("ready", () => {
     //hook.send("공지사항"); 공지 용
 });
 
+client.commands = new Discord.Collection();
+client.aliases = new Discord.Collection();
+
+fs.readdirSync("./Commands/").forEach(dir => {
+    const Filter = fs.readdirSync(`./Commands/${dir}`).filter(f => f.endsWith(".js"));
+    Filter.forEach(file =>{
+        const cmd = require(`./Commands/${dir}/${file}`);
+        client.commands.set(cmd.config.name, cmd);
+        for(var alias of cmd.config.aliases){
+            client.aliases.set(alias, cmd.config.name);
+        }
+    });
+});
+function runCommand(command,msg,args,prefix){
+    if (client.commands.get(command) || client.aliases.get(command)){
+        const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command));
+        if (cmd){cmd.run(client, msg, args, prefix);}
+        return;
+    }
+}
+
 client.on("message", msg => {
     if(msg.author.bot){return;}//봇이면 되돌리기
     else if (msg.content.indexOf(prefix) !== 0){return;}//프리픽스 없으면 되돌리기
@@ -24,35 +45,14 @@ client.on("message", msg => {
     var args = msg.content.slice(prefix.length).trim().split(/ +/g);//슬라이싱
     var command = args.shift().toLowerCase();//여기까지 프리픽스 빼고 나머지
 
-    if(command === `핑`){ping(msg);}
-
-    else if(command === `띵동`){pong(msg);}
-    
-    else if(command === `청소`){clear(msg, args);}
-
-    else if(command === `굴러`){RollOver(msg);}
+    try{
+        runCommand(command,msg,args,prefix);
+    } catch(err){
+        console.error(err);
+    }
 });
-function ping(msg){//핑 찍어주는 함수
-    msg.reply(`님의 핑은  ${client.ws.ping}ms입니당`);}
 
-function pong(msg){// 띵동 연속 5번 찍는 함수
-    for(var i =0; i<5; i++){
-        msg.reply("띵동");
-    }
-}
-function clear(msg, args){
-    if (!args[0]){return msg.reply("띵동 청소할 값을 정수로 넣어주세요");}
-    else if (!Number(args[0])){ return msg.reply("띵동 메세지는 지울 값은 숫자로!");}
-    else if (args[0] < 1){ return msg.reply("띵동 메세지를 지울 값은 1보다 크게!");}
-    else if (args[0] > 100){ return msg.reply("띵동 메세지를 지울 값이 100보다 크면 안지워져유");}
-    else{
-        msg.channel.bulkDelete(args[0]).then(msg.reply(`성공적으로 ${args[0]}만큼 값을 삭제하였습니다!`));
-    }
 
-}
-function RollOver(msg){
-    msg.reply("띵동...?\n데구르르 데굴");
-}
 // 웹훅
 // https://discordapp.com/api/webhooks/746336318166138981/IhpONhZszvbvQEhium9Y6Xdo2jH_IVPRtK8JS4OU_O9wThBLJdoXMxjvbDur33X1_ePU
 client.login(_config.BotToken());// run bot
