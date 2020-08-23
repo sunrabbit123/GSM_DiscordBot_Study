@@ -19,6 +19,8 @@ client.on("ready", () => {
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
+client.devs = ['508788780002443284'];
+client.category = ['bot', 'crawling', 'owner', 'moderator'];
 
 fs.readdirSync("./Commands/").forEach(dir => {
     const Filter = fs.readdirSync(`./Commands/${dir}`).filter(f => f.endsWith(".js"));
