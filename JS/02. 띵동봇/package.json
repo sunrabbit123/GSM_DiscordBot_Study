@@ -1,0 +1,23 @@
+{
+  "name": "gsm_discordbot_study",
+  "version": "1.0.0",
+  "description": "**GSM Discord Bot Study**에서\r 깃헙의 협업기능과 각기다른 각자만의 봇을 구현하여\r 기능을 모아보자하여서 만들게 되었습니다.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunrabbit123/GSM_DiscordBot_Study.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sunrabbit123/GSM_DiscordBot_Study/issues"
+  },
+  "homepage": "https://github.com/sunrabbit123/GSM_DiscordBot_Study#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "mariadb": "^2.4.2"
+  }
+}
