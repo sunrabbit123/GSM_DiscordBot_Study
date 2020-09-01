@@ -1,1 +1,1 @@
-# Golang discord bot
+# Golang discord bot - gogo
