@@ -18,7 +18,7 @@ import java.util.List;
 
 public class AbotMain {
     public static void main(String[] args) {
-        String token = "NzIwMTk2MjAxMTQ3OTI0NDkw.XuCc-g.E1SGU8Yus9GuiKd_fm1Cjb--GPs";
+        String token = "NzIwMTk2MjAxMTQ3OTI0NDkw.XuCc-g.eB1b81r126AyH4mFs1uOD-Aiqx0";
         DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
 
         System.out.println("디스코드 로그인에 성공했어요!");
@@ -106,7 +106,7 @@ public class AbotMain {
 
                             fw.close();
                             br.close();
-                            ev.getChannel().sendMessage("네! " + "\"" + msg.replace("에이야 잊어 ", "") + "\"" + " 커맨드를 삭제했어요." + "\n기억을 지운다는 게 쉬운 건 아니라구요?");
+                            ev.getChannel().sendMessage("네! " + "\"" + msg.replace("에이야 잊어 ", "") + "\"" + " 커맨드를 삭제했어요.");
                             System.out.println("배운 말을 성공적으로 데이터베이스에서 삭제했어요. 내용을 덮어씌우고, 파일을 닫기까지 완료했어요!");
                         } else
                             ev.getChannel().sendMessage("으음.. 그런 말은 배운 기억이 없는걸요?");
@@ -202,6 +202,7 @@ public class AbotMain {
                     embed.addField("도움말", "현재 보고 있는 도움말 창을 보냅니다.");
                     embed.addField("죽어", "에이를 죽입니다.\n※모든 서버의 연결이 끊기니 주의해주세요※");
                     embed.addField("계산 [식]", "식을 계산해 줍니다. 일부 인식하지 못하는 수식이 존재합니다.\nex)팩토리얼 등");
+                    embed.addField("밥", "오늘의 식사 메뉴를 추천해 드립니다.");
 
                     embed.setFooter("업뎃 문의는 퓨브#4783로");
                     ev.getChannel().sendMessage( embed );
@@ -218,6 +219,26 @@ public class AbotMain {
                     ev.getChannel().sendMessage("수정 전 메세지예요.");
                     try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
                     Message.edit(api, ev.getChannel().getId(), ev.getMessageId(), "레후?");
+                }
+                else if( msg.contains("밥") ){
+                    int foodcnt=0;
+
+                    try {
+                        List<String> food = new ArrayList<String>();
+                        String path = "D:\\somthing I made\\AbotRemaster_Maven\\Foods.txt";
+                        BufferedReader br = new BufferedReader(new FileReader(path));
+                        String buff;
+
+                        while( ( buff = br.readLine() ) != null ) {
+                            food.add(buff);
+                            foodcnt++;
+                            System.out.println("파일의 항목을 리스트에 담는 중이예요....");
+                        }
+
+                        System.out.println(foodcnt + "개의 항목을 리스트에 담는 데 성공했어요!");
+
+                        ev.getChannel().sendMessage( "오늘은 " + food.get( (int)(Math.random()*(foodcnt+1)) ) + " 어떠신가요?" );
+                    } catch ( Exception e ){ e.printStackTrace(); }
                 }
                 else {
                     try {
