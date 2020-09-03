@@ -18,6 +18,7 @@
   "homepage": "https://github.com/sunrabbit123/GSM_DiscordBot_Study#readme",
   "dependencies": {
     "discord.js": "^12.3.1",
+    "express": "^4.17.1",
     "fs": "0.0.1-security",
     "mariadb": "^2.4.2"
   }
