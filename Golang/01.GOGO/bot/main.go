@@ -23,6 +23,7 @@ func init() {
 var (
 	addCommand string = "고커추"
 	prefix     string = "고"
+	deleteCommand = "고커삭"
 )
 
 func main() {
@@ -79,11 +80,24 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	addCommandFilter := strings.Fields(m.Content)
 	if string(addCommandFilter[0]) == addCommand {
-		_, err := db.Exec("INSERT INTO usercommand (CReq, CRes) VALUES (?, ?);", addCommandFilter[1], strings.Join(addCommandFilter[2:], " "))
+		if addCommandFilter[1] == "고" {
+			s.ChannelMessageSend(m.ChannelID, "그거 안돼 퉷")
+		} else { 
+			_, err := db.Exec("INSERT INTO usercommand (CReq, CRes) VALUES (?, ?);", addCommandFilter[1], strings.Join(addCommandFilter[2:], " "))
+			if err != nil {
+			panic(err.Error())
+			}
+			s.ChannelMessageSend(m.ChannelID, "추가 완료!")
+		}
+	}
+
+	deleteCommandFilter := strings.Fields(m.Content)
+	if string(deleteCommandFilter[0]) == deleteCommand {
+		_, err := db.Exec("DELETE FROM usercommand WHERE CReq = ?;", strings.Join(deleteCommandFilter[1:], " "))
 		if err != nil {
 			panic(err.Error())
 		}
-		s.ChannelMessageSend(m.ChannelID, "추가 완료!")
+		s.ChannelMessageSend(m.ChannelID, "삭제 완료!")
 	}
 
 	var userCReq string
