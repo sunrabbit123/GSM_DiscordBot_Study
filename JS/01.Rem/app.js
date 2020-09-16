@@ -76,7 +76,7 @@ client.on("message", msg => {
 
     input_output(`샤키봇`,`선배님이십니다.`)
 
-    input_output(`꽈배기`,`ㄴ...죽인다`)
+    input_output(`꽈배기`,`...죽인다`)
     
     input_output(`굴개`, `제 개발자세요.`)
     
