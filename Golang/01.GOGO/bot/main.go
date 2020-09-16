@@ -63,7 +63,9 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	prefixFilter := strings.Fields(m.Content)
+	massage := m.Content
+
+	prefixFilter := strings.Fields(massage)
 	if string(prefixFilter[0]) == prefix {
 		var CReq string
 		_, err := db.Exec("SELECT CRes FROM command WHERE CReq = ?;", prefixFilter[1])
@@ -81,13 +83,15 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 	addCommandFilter := strings.Fields(m.Content)
 	if string(addCommandFilter[0]) == addCommand {
 		if addCommandFilter[1] == "고" {
-			s.ChannelMessageSend(m.ChannelID, "그거 안돼 퉷")
+			s.ChannelMessageSend(m.ChannelID, "고는 사용할 수 없습니다.")
+		} else if addCommandFilter[2] == "" {
+			s.ChannelMessageSend(m.ChannelID, "명령어 형식은 ```고커추 '명령어' '반응할 말'```입니다.")
 		} else { 
 			_, err := db.Exec("INSERT INTO usercommand (CReq, CRes) VALUES (?, ?);", addCommandFilter[1], strings.Join(addCommandFilter[2:], " "))
 			if err != nil {
 			panic(err.Error())
 			}
-			s.ChannelMessageSend(m.ChannelID, "추가 완료!")
+			s.ChannelMessageSend(m.ChannelID, "추가가 성공적으로 완료되었습니다.")
 		}
 	}
 
