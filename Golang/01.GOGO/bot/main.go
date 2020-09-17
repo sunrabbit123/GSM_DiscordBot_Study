@@ -65,12 +65,13 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	massage := m.Content
 
-	prefixFilter := strings.Fields(massage)
-	if string(prefixFilter[0]) == prefix {
+	filter := strings.Fields(massage)
+
+	if string(filter[0]) == prefix {
 		var CReq string
-		_, err := db.Exec("SELECT CRes FROM command WHERE CReq = ?;", prefixFilter[1])
+		_, err := db.Exec("SELECT CRes FROM command WHERE CReq = ?;", filter[1])
 		if err == nil {
-			rowErr := db.QueryRow("SELECT CRes FROM command WHERE CReq = ?;", prefixFilter[1]).Scan(&CReq)
+			rowErr := db.QueryRow("SELECT CRes FROM command WHERE CReq = ?;", filter[1]).Scan(&CReq)
 			if rowErr != nil {
 				panic(err.Error())
 			}
@@ -80,14 +81,13 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-	addCommandFilter := strings.Fields(m.Content)
-	if string(addCommandFilter[0]) == addCommand {
-		if addCommandFilter[1] == "고" {
+	if string(filter[0]) == addCommand {
+		if filter[1] == "고" {
 			s.ChannelMessageSend(m.ChannelID, "고는 사용할 수 없습니다.")
-		} else if addCommandFilter[2] == "" {
-			s.ChannelMessageSend(m.ChannelID, "명령어 형식은 ```고커추 '명령어' '반응할 말'```입니다.")
+		} else if len(filter) == 2 {
+			s.ChannelMessageSend(m.ChannelID, "고커추 형식은 ```고커추 '명령어' '반응할 말'```입니다.")
 		} else { 
-			_, err := db.Exec("INSERT INTO usercommand (CReq, CRes) VALUES (?, ?);", addCommandFilter[1], strings.Join(addCommandFilter[2:], " "))
+			_, err := db.Exec("INSERT INTO usercommand (CReq, CRes) VALUES (?, ?);", filter[1], strings.Join(filter[2:], " "))
 			if err != nil {
 			panic(err.Error())
 			}
@@ -95,9 +95,8 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	}
 
-	deleteCommandFilter := strings.Fields(m.Content)
-	if string(deleteCommandFilter[0]) == deleteCommand {
-		_, err := db.Exec("DELETE FROM usercommand WHERE CReq = ?;", strings.Join(deleteCommandFilter[1:], " "))
+	if string(filter[0]) == deleteCommand {
+		_, err := db.Exec("DELETE FROM usercommand WHERE CReq = ?;", strings.Join(filter[1:], " "))
 		if err != nil {
 			panic(err.Error())
 		}
@@ -116,6 +115,6 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
-func createEmbed(s *discordgo.Session, m *discordgo.Message) {
-	embed.NewEmbed()
+func createEmbed(s *discordgo.Session, m *discordgo.Message, *embed.Embed) {
+	Example = embed.NewEmbed("Title", "", "")
 }
