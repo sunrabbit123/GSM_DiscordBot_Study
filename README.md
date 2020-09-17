@@ -1,5 +1,5 @@
 
-![header](https://capsule-render.vercel.app/api?type=wave&color=gradient&height=300&section=header&text=GSM_DiscordBot_Study&fontSize=90)
+![header](https://capsule-render.vercel.app/api?type=wave&color=gradient&height=300&section=header&text=GSM_DiscordBot_Study&fontSize=50)
 ## 개요
 **GSM Discord Bot Study**에서
 깃헙의 협업기능과 각기다른 각자만의 봇을 구현하여
