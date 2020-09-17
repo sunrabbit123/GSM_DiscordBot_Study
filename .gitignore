@@ -1,5 +1,6 @@
-JS/**/config.JS
+# JS node Module
 JS/**/node_modules/**
-JS/**/package.json
-JS/**/package-lock.json
+
+# bot token
 Java/**/token.txt
+JS/**/config.JS
