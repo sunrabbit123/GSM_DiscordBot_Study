@@ -4,3 +4,4 @@ JS/**/node_modules/**
 # bot token
 Java/**/token.txt
 JS/**/config.JS
+Python/**/config.ini
