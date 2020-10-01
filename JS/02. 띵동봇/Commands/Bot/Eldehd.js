@@ -1,6 +1,6 @@
 exports.run = async(client, msg, args, prefix)=>{
     for(var i = 0; i<5; i++){
-        msg.channel.send("<@610787845359271966>");
+        msg.reply("띵동");
     }
 
 }
