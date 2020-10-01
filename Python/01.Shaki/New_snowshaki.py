@@ -33,12 +33,13 @@ def print_time(func):
 
 
 class ShakiBot(discord.Client):
-    def __init__(self,*,debug = False):
+    def __init__(self,*,debug = False, admin : str = '508788780002443284'):
         self.debug = debug
         #self.dbmanger = dbmanger()
         self.color = 0x7ACDF4
         self.prefix =["샤키야","참수진","수진아","Shaki","shaki"]
         self.prefixed = 0
+        self.admin = admin
         
 
 
