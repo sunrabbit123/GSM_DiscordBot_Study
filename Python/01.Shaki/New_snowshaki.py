@@ -31,13 +31,6 @@ def print_time(func):
         return await func(self, message)
     return wrapper
 
-def bad_shaki(func):
-    async def wrapper(self, message):
-        if message.content.split()[-1] == "굶어":
-            await message.channel.send("야랄마세요;; 너나 하세요")
-        return await func(self, message)
-    return wrapper
-
 
 class ShakiBot(discord.Client):
     def __init__(self,*,debug = False):

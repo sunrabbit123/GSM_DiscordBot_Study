@@ -1,0 +1,171 @@
+package com.github.sunrabbit123.JavaBot;
+
+import java.io.IOException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import org.javacord.api.DiscordApi;
+import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+
+public class Main {
+
+	final static String token = "NzAwNjExMzg0OTk5NjczOTM2.XpldMg.EZ5a6LC0pdftpCdq2fH1ePyHl94";
+	final static String prefix = "¶óÀÌÃò";
+	final static String URL = "https://open.neis.go.kr/hub/mealServiceDietInfo?"
+			+ "KEY=bfa95730b1b84b07b2db733b2138d9aa&pIndex=1&pSize=100" + "&ATPT_OFCDC_SC_CODE=F10"
+			+ "&SD_SCHUL_CODE=7380292";
+
+	public static void main(String[] args) {
+		DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
+
+		CheckTime ckt = new CheckTime(api);
+		Thread th = new Thread(ckt);
+		th.start();
+
+		System.out.println("Logged in!");
+		api.updateActivity("¶óÀÌÃòÃòÃòÃò¸¨");
+
+		api.addMessageCreateListener(ev -> {
+
+			EmbedBuilder embed = new EmbedBuilder();// ÀÓº£µå »ı¼º
+
+			String msg = ev.getMessage().getContent();
+			String userName = ev.getMessageAuthor().getName();
+			TextChannel Ch = ev.getChannel();
+
+			if (msg.startsWith(prefix)) {
+				if (msg.contains("fkdlcb")) {
+					Ch.sendMessage("¶óÀÌÃò´Â ÇÑ±Û¹Û¿¡ ¸ğ¸£´Â°É¿ä!");
+				} else if (msg.contains("±¼·¯")) {
+					int RandomNum = (int) (Math.random() * 100);
+					switch (RandomNum % 3) {
+					case 1:
+						Ch.sendMessage("µ¥±¸¸£¸£ µ¥±¼");
+						break;
+					case 2:
+						Ch.sendMessage("µ¥±¸¸£¸£ µ¥±¸¸£");
+						break;
+					case 3:
+						Ch.sendMessage("¶óÀÌÃò¸¦ ºÒ·¯¿À´Â ÁßÀÔ´Ï´Ù....\n·ÎµùÁß....");
+						break;
+					}
+				} else if (msg.contains("ÁÖ»çÀ§")) {
+					int Rnum = (int) (Math.random() * 10) % 7;
+					Ch.sendMessage("µ¥±¸¸£¸£.... ");
+					Ch.sendMessage("¶Ç¸£¸£¸£....");
+					Ch.sendMessage(Rnum + "ÀÔ´Ï´Ù..!");
+
+				} else if (msg.contains("±Ş½Ä")) {
+					Document doc = null;
+					Calendar cal = Calendar.getInstance();
+					
+					int year = cal.get(cal.YEAR);
+					int month = cal.get(cal.MONTH) + 1;
+					int date = cal.get(cal.DATE);
+					if(msg.contains("³»ÀÏ")) {
+						date++;
+					}
+					String YMD = "&MLSV_YMD=";
+					if (month < 10) {
+						YMD +=  year + "0" + month + date;
+					}else {
+						YMD += year + month + date;
+					}
+					String URLS = URL + YMD;
+					//URL °è»ê
+					
+					try {
+						doc = Jsoup.connect(URLS).get();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String doctext = doc.text();
+					doctext = doctext.replace("½Ò : ±¹³»»ê<br/>±èÄ¡·ù : ±¹³»»ê<br/>°íÃå°¡·ç(±èÄ¡·ù) : ±¹³»»ê<br/>¼è°í±â(Á¾·ù) : ±¹³»»ê(ÇÑ¿ì)<br/>µÅÁö°í±â : ±¹³»»ê<br/>´ß°í±â : ±¹³»»ê<br/>¿À¸®°í±â : ±¹³»»ê<br/>¼è°í±â ½ÄÀ°°¡°øÇ° : ±¹³»»ê<br/>µÅÁö°í±â ½ÄÀ°°¡°øÇ° : ±¹³»»ê<br/>´ß°í±â ½ÄÀ°°¡°øÇ° : ±¹³»»ê<br/>¿À¸®°í±â °¡°øÇ° : ±¹³»»ê<br/>³«Áö : ±¹³»»ê<br/>°íµî¾î : ±¹³»»ê<br/>°¥Ä¡ : ±¹³»»ê<br/>¿ÀÂ¡¾î : ±¹³»»ê<br/>²É°Ô : ±¹³»»ê<br/>ÂüÁ¶±â : ±¹³»»ê<br/>Äá : ±¹³»»ê ", "");
+					
+					String mill = null;
+					if(msg.contains("¾ÆÄ§") || msg.contains("Á¶½Ä")) {
+						mill = doctext.substring(doctext.lastIndexOf("Á¶½Ä"), doctext.lastIndexOf("Áß½Ä"));
+						mill = mill.split(" ")[3];//¸Ş´ººÎºĞ¸¸ ÃßÃâ
+					}else if(msg.contains("Á¡½É") || msg.contains("Áß½Ä")){
+						mill = doctext.substring(doctext.lastIndexOf("Áß½Ä"), doctext.lastIndexOf("Á¶½Ä"));
+						mill = mill.split(" ")[3];//¸Ş´ººÎºĞ¸¸ ÃßÃâ
+					}else if(msg.contains("¼®½Ä") || msg.contains("Àú³á")) {
+						mill = doctext.substring(doctext.lastIndexOf("¼®½Ä"));
+						mill = mill.split(" ")[3];//¸Ş´ººÎºĞ¸¸ ÃßÃâ
+					}else {
+						int hour = cal.get(Calendar.HOUR_OF_DAY);
+						if(hour >= 8 && hour <= 13) {
+							mill = doctext.substring(doctext.lastIndexOf("Áß½Ä"), doctext.lastIndexOf("Á¶½Ä"));
+						}else if(hour >= 13 && hour <= 19) {
+							mill  = doctext.substring(doctext.lastIndexOf("¼®½Ä"));
+						}else {
+							mill = doctext.substring(doctext.lastIndexOf("Á¶½Ä"), doctext.lastIndexOf("Áß½Ä"));
+						}
+						
+					}
+					
+					mill = mill.replaceAll("[^°¡-ÆR],<br/>,&", "");
+					mill = mill.replaceAll("[0-9]", "");
+					mill = mill.replaceAll("[.]", "");
+					mill = mill.replaceAll("[(g):]", "");
+					
+					
+					
+					
+					String[] millList = mill.split("<br/>");
+					
+					
+					Ch.sendMessage(Arrays.toString(millList));
+					embed.setTitle("¶óÀÌÃòÃòÃò¸¨");
+					embed.setDescription("¶óÀÌÃò°¡ ±Ş½ÄÀ» ÅëÁöÇÕ´Ï´Ù.");
+					
+					for(int i = 0; i < millList.length; i++) {
+						try{
+							embed.addField((i+1) + "¹øÂ° ¸Ş´º", millList[i]);
+						}catch ( Exception e ) {
+							System.out.println(e);
+						}
+						
+					}
+					Ch.sendMessage(embed);
+					System.out.println(Arrays.toString(millList));
+					System.out.println(URLS);
+				}
+
+			}
+		});
+	}
+
+}
+
+class CheckTime implements Runnable {
+	DiscordApi api;
+	boolean checked = false;
+	String targetTime = "16:33:00";
+
+	public CheckTime(DiscordApi api) {
+		this.api = api;
+	}
+
+	public void run() {
+		while (true) {
+			SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+			Date time = new Date();
+			String tm = format.format(time);
+
+//            if (tm.equals(targetTime)) {
+//                api.getTextChannelById("719449629963452449").get().sendMessage("Å×½ºÆ®ÀÎ°Å¿¹¿ä! " + tm + "ÀÌ µÇ¾î¼­ ¸Ş½ÃÁö¸¦ º¸³Â¾î¿ä!");
+//            }
+		}
+	}
+}
