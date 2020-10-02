@@ -14,7 +14,7 @@ from functools import partial
 from const import Docs,Strings
 from web_find import SearchWord
 from custom_manger import command_manger
-from func import print_time
+from func import print_time, set_embed
 #from db_manger import  dbmanger
 
 
@@ -66,13 +66,6 @@ class ShakiBot(commands.Bot):
                 await func(message)
             else:
                 if prefixed == False:
-                    # if message.content == "아니":
-                    #     await message.channel.send("도대체")
-                    # elif message.content == "도대체":
-                    #     await message.channel.send("아니")
-
-                    # await self.command_custom_send(message)
-                    
                     return
                 else:
                     with open("snow_shaki_bot.txt","r",encoding='utf-8') as f:
@@ -96,37 +89,12 @@ class ShakiBot(commands.Bot):
                             return
                 
     async def command_help(self,message):
-        emb = discord.Embed(title='깔롤랭은 국룰입니다',description=Docs.help,colour=self.color)
+        emb = set_embed(message, title='깔롤랭은 국룰입니다.', description = Docs.help)
         await message.channel.send(embed = emb)
 
     async def command_choice(self,message):
-        chlist = message.content.split()
-        chlist = chlist[2:]
-        await message.channel.send("내가 뽑은건...!\n%s입니당!"%random.choice(chlist))
-
-
-        
-        
-        
-
-    # async def command_custom(self,message,prefixed = True):
-    #     await command_manger(message,prefixed)
-        
-
-
-    # async def command_custom_send(self,message,prefixed = False):
-    #     contents = message.content.split()
-    #     search_msg = self.dbmanger.search_data('made_command','keycommand',contents[0])
-        
-    #     try:
-    #         server = str(message.guild.id)
-    #         server_command = [cmd for cmd in search_msg if cmd.server_id == server]
-    #         searched_msg = random.choice(server_command)
-    #         await message.chnnel.send(searched_msg.output) 
-    #     except (IndexError, ValueError):
-    #         return
-    
-    
+        chlist = message.content.split()[2:]
+        await message.channel.send(f"내가 뽑은건...!\n{random.choice(chlist)}입니당!")
         
     
     async def command_잊어(self,message):#샤키야 key커맨드
@@ -160,68 +128,34 @@ class ShakiBot(commands.Bot):
 
     
     async def command_구글검색(self, message):
-        findg = message.content[9:]
-        await message.channel.trigger_typing()
+        findg = " ".join(message.content.split()[2:])
         image = SearchWord().get_image(findg)
 
         if image is None:
             await message.channel.send("이미지 불러오기를 실패했습니다")
 
         else:
-            em = discord.Embed(title = "%s의 이미지 검색결과" %findg,colour = self.color)
+            em = set_embed(message, title = f"{findg}의 이미지 검색 결과")
             em.set_image(url = image)
         await message.channel.send(embed = em)
         
         
             
     async def command_사전검색(self, message):
-        findn = message.content[9:]
+        findn = " ".join(message.content.split()[2:])
         findit = SearchWord().get_dic(findn)
 
         if findit is None:
             await message.channel.send("사전검색이 실패했습니다.")
 
         else:
-            em2 = discord.Embed(title = "%s의 네이버사전검색 결과" % findn,description = "%s" %findit,colour = self.color)
-            await message.channel.send(embed = em2)
+            em = set_embed(message,
+                            title = f"{findn}의 네이버 사전검색 결과",
+                            description = findit)
+            await message.channel.send(embed = em)
     
     async def command_굴러(self,message):
         await message.channel.send(random.choice(["데구르르 꽝","꽝 데구르르","데구르르 뎅강","ㄷㄱㄹㄹ ㄷㄱ","야랄,,, 너나 구르세요"]))
     
-    async def command_Hello(self,message):
-        if message.content.split()[0] == "참수진":
-            await message.channel.send("뒤져")
-        else:
-            pass
-    # @bad_shaki
-    # async def command_급식(self,message):
-    #     keyword = message.content.split()[-1]
-    #     today_meal = SearchWord().get_meal(keyword = "내일" if keyword == "내일" else "[오늘]" )
-
-        
-        
-        
-    #     morning = today_meal.index("[중식]")
-    #     if "[석식]" in today_meal:
-    #         afternoon = today_meal.index("[석식]")
-        
-    #     today_morning = '-\n'.join(today_meal[1:morning])
-    #     if "[석식]" in today_meal:
-    #         today_afternoon = '-\n'.join(today_meal[morning +1 :afternoon])
-    #         today_dinner = '-\n'.join(today_meal[afternoon +1 :])
-
-    #     else:
-    #         today_afternoon = '-\n'.join(today_meal[morning+1:])
-            
-        
-        
-    #     emb = discord.Embed(title = "**%s의 급식 **" % ("[내일]" if keyword == "내일" else "[오늘]"), colour = self.color)
-       
-    #     emb.add_field(name = "[조식]", value = today_morning,inline = False)
-    #     emb.add_field(name = "[중식]", value = today_afternoon, inline = False)
-    #     if "[석식]" in today_meal:
-    #         emb.add_field(name = "[석식]", value = today_dinner, inline = False)
-
-    #     await message.channel.send(embed = emb)
-
+    
 
