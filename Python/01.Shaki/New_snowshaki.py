@@ -1,5 +1,6 @@
-from openpyxl import load_workbook
 import discord
+from discord.ext import commands
+
 import asyncio
 import random
 import time
@@ -10,11 +11,12 @@ import os
 import re
 
 from functools import partial
-from datetime import datetime
 from const import Docs,Strings
 from web_find import SearchWord
 from custom_manger import command_manger
+from func import print_time
 #from db_manger import  dbmanger
+
 
 def command_find(message,prefixed = True):
     diction = getattr(Strings,'command_prefixes' if prefixed else 'commands')
@@ -23,25 +25,19 @@ def command_find(message,prefixed = True):
             return command
 
 
-def print_time(func):
-    async def wrapper(self, message):
-        print(datetime.now(), end = ' ')
-        return await func(self, message)
-    return wrapper
 
 
-class ShakiBot(discord.Client):
+class ShakiBot(commands.Bot):
     def __init__(self,*,debug = False, admin : str = '508788780002443284'):
         self.debug = debug
         #self.dbmanger = dbmanger()
-        self.color = 0x7ACDF4
         self.prefix =["샤키야","참수진","수진아","Shaki","shaki"]
         self.prefixed = 0
         self.admin = admin
         
 
 
-        super().__init__()
+        super().__init__(command_prefix = None, help_command=None)
 
     async def on_ready(self):
         activity = discord.Activity(name='"샤키야 도움말" 이라고 해보지 않으련?', type=discord.ActivityType.playing)
@@ -50,7 +46,7 @@ class ShakiBot(discord.Client):
 
    
     @print_time
-    async def on_message(self, message):
+    async def on_message(self, message : discord.Message):
         await self.wait_until_ready()
         if not message.author.bot:
             command = message.content.lower().split()
