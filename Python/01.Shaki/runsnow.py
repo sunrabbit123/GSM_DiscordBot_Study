@@ -4,8 +4,8 @@ from configparser import ConfigParser
 config = ConfigParser()
 config.read('config.ini')
 
-token = config.get('difault', 'token')
-admin = config.get('difault', 'admin')
+token = config.get('default', 'token')
+admin = config.get('default', 'admin')
 
 print("와ㅏㅏ 실행된다ㅏㅏ")
 ShakiBot(admin = admin).run(token)
