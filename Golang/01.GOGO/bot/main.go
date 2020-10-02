@@ -11,7 +11,6 @@ import (
 	"syscall"
 	"token"
 
-	embed "github.com/Clinet/discordgo-embed"
 	"github.com/bwmarrin/discordgo"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -21,9 +20,9 @@ func init() {
 }
 
 var (
-	addCommand string = "고커추"
-	prefix     string = "고"
-	deleteCommand = "고커삭"
+	addCommand    string = "고커추"
+	prefix        string = "고"
+	deleteCommand        = "고커삭"
 )
 
 func main() {
@@ -86,10 +85,10 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "고는 사용할 수 없습니다.")
 		} else if len(filter) == 2 {
 			s.ChannelMessageSend(m.ChannelID, "고커추 형식은 ```고커추 '명령어' '반응할 말'```입니다.")
-		} else { 
+		} else {
 			_, err := db.Exec("INSERT INTO usercommand (CReq, CRes) VALUES (?, ?);", filter[1], strings.Join(filter[2:], " "))
 			if err != nil {
-			panic(err.Error())
+				panic(err.Error())
 			}
 			s.ChannelMessageSend(m.ChannelID, "추가가 성공적으로 완료되었습니다.")
 		}
@@ -113,8 +112,4 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		s.ChannelMessageSend(m.ChannelID, userCReq)
 	}
-}
-
-func createEmbed(s *discordgo.Session, m *discordgo.Message, *embed.Embed) {
-	Example = embed.NewEmbed("Title", "", "")
 }
