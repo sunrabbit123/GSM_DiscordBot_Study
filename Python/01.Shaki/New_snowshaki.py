@@ -15,8 +15,6 @@ from const import Docs,Strings
 from web_find import SearchWord
 from custom_manger import command_manger
 #from db_manger import  dbmanger
-from const import study_pathfind
-
 
 def command_find(message,prefixed = True):
     diction = getattr(Strings,'command_prefixes' if prefixed else 'commands')
@@ -110,11 +108,6 @@ class ShakiBot(discord.Client):
         chlist = chlist[2:]
         await message.channel.send("내가 뽑은건...!\n%s입니당!"%random.choice(chlist))
 
-    # async def command_study(self, message):
-    #     messages = message.content.split()[2]
-    #     outputs = study_pathfind().find_study(messages)
-    #     await message.channel.send("https://" +outputs)
-    #     print(outputs)
 
         
         
@@ -170,7 +163,7 @@ class ShakiBot(discord.Client):
         await message.channel.send("야랄 왜 나한테...")
 
     
-    async def command_구글검색(self,message):
+    async def command_구글검색(self, message):
         findg = message.content[9:]
         await message.channel.trigger_typing()
         image = SearchWord().get_image(findg)
@@ -185,7 +178,7 @@ class ShakiBot(discord.Client):
         
         
             
-    async def command_사전검색(self,message):
+    async def command_사전검색(self, message):
         findn = message.content[9:]
         findit = SearchWord().get_dic(findn)
 
