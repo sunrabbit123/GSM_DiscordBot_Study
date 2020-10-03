@@ -12,7 +12,7 @@ import os
 import re
 
 from .embed import set_embed
-from const import Docs
+from const import Docs, Strings
 
 class basic_command:
 
@@ -25,5 +25,12 @@ class basic_command:
     async def command_choice(message):
         chlist = message.content.split()[2:]
         await message.channel.send(f"내가 뽑은건...!\n{random.choice(chlist)}입니당!")
-        
+    
+    @staticmethod
+    async def command_굴러(self,message):
+        await message.channel.send(Strings.roll)
+    
+    
+    
+    
 

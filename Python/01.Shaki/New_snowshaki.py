@@ -15,7 +15,7 @@ from functools import partial
 from const import Docs,Strings
 from web_find import SearchWord
 from custom_manger import command_manger
-from func import print_time, set_embed
+from func import print_time, set_embed, basic_command
 # endregion
 
 #from db_manger import  dbmanger
