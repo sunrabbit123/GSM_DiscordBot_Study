@@ -91,11 +91,11 @@ class ShakiBot(commands.Bot):
                             print("%s는 명령어가 아닙니다.(User : %s)\n" %(command,message.content))
                             return
                 
-    async def command_help(self,message):
+    async def command_help(self, message):
         emb = set_embed(message, title='깔롤랭은 국룰입니다.', description = Docs.help)
         await message.channel.send(embed = emb)
 
-    async def command_choice(self,message):
+    async def command_choice(self, message):
         chlist = message.content.split()[2:]
         await message.channel.send(f"내가 뽑은건...!\n{random.choice(chlist)}입니당!")
         
