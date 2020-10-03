@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 
 public class AbotMain {
     public static void main(String[] args) throws ExecutionException, InterruptedException, IOException {
-        String token = "NzIwMTk2MjAxMTQ3OTI0NDkw.XuCc-g.9OBGC1qYqVSr4dN60bKnSZwp9iI";
+        String token = "NzIwMTk2MjAxMTQ3OTI0NDkw.XuCc-g.9rso2ajKg-Glro2oLIBWAZPFqAs";
         DiscordApi api = new DiscordApiBuilder()
                 .setToken(token)
                 .login()
@@ -89,7 +89,7 @@ public class AbotMain {
                 channel.sendMessage("으음...그러니까 한글로.....");
 
             if( !message.getContent().startsWith("에이야") ) { return; }
-            System.out.println(Instant.now() + "에 " + ev.getServer().get().getName() + " 에서 " + message.getAuthor().getName() + " 님이 저를 호출한 메시지를 보냈어요.");
+            System.out.println(Instant.now() + "에 [" + ev.getServer().get().getName() + "] 에서 [" + message.getAuthor().getName() + "] 님이 저를 호출한 메시지를 보냈어요.");
 
             if( msg.contains("배워") ) {
                 learn( msg, ev );//배워 메소드
@@ -122,11 +122,13 @@ public class AbotMain {
                     Message.edit( api, channel.getId(), msgId, "..아니, 심심하셨나요?" );
                 }catch( Exception e ){ e.printStackTrace(); }
             }
+            /*
             else if( msg.contains("죽어") || msg.contains("주거") || msg.contains("꺼져") ){
                 channel.sendMessage("아, 네....\n[접속을 종료합니다.]");
                 api.disconnect();
                 System.out.println("접속을 종료했어요. 가라면 가야죠 뭐. 에휴..");
             }
+             */
             else if( msg.contains("도움말") || msg.contains("도와줘") || msg.contains("help") ){
                 String replaced = msg.replace("에이야 도움말 ", "");
                 Color c = new Color( 196, 230, 145 );
@@ -138,22 +140,25 @@ public class AbotMain {
                          .addField("`에이야 안녕`", "에이가 인사해 줍니다. `인삿말은 랜덤입니다.`")
                          .addField("`에이야 굴러`", "모든 봇의 버릴 수 없는 정체성. 데구르르 데굴 굴러줍니다.")
                          .addField("`에이야 핑`", "원래는 메시지에 답장을 보내기까지 걸리는 시간을 ms단위로\n보내 줄 예정이었지만, 어째선지 작동을 안해서\n더욱 고차원적으로 퐁! 이라고 답해줍니다.")
-                         .addField("`에이야 밥`", "오늘의 식사 메뉴를 추천해 드립니다.");
+                         .addField("`에이야 밥`", "오늘의 식사 메뉴를 추천해 드립니다.")
+                         .addField("`에이야 참참참`", "참참참을 합니다. 아마도...?");
                 }else if( replaced.equals("기능") ){
                     embed.setTitle("에이봇의 기능")
-                         .addField("`에이야 조용`", "에이를 10초간 닥치게 합니다. 도배방지 커맨드입니다. `※미완성 커맨드※`")
-                         .addField("`에이야 죽어`", "에이를 죽입니다. `※모든 서버의 연결이 끊겨버리니 주의해주세요※`")
+                         //.addField("`에이야 조용`", "에이를 10초간 닥치게 합니다. 도배방지 커맨드입니다. `※미완성 커맨드※`")
+                         .addField("`에이야 죽어`", "에이를 죽입니다. `※만든놈의 귀차니즘으로 삭제된 커맨드※`")
                          .addField("`에이야 계산 [식]`", "식을 계산해 줍니다. `일부 인식하지 못하는 수식이 존재합니다.`\nex)팩토리얼 등")
-                         .addField("`에이야 생일 [MM.dd]`", "에이에게 생일을 알려줍니다. 등록하고 나면 나중에 생일을 축하해줍니다.\n`한 자릿수는 꼭 앞에 0을 붙혀 두 자릿수로 만들어 넣어주세요.`\n```ex) 2.1(X)  02.01(O)\n※한 번 등록한 생일은 변경할 수 없습니다.※\n생일이 잘못 입력된 것 같으면 퓨브#2222로 문의해주세요.```");
+                         .addField("`에이야 생일 [MM.dd]`", "에이에게 생일을 알려줍니다. 등록하고 나면 나중에 생일을 축하해줍니다.\n`한 자릿수는 꼭 앞에 0을 붙혀 두 자릿수로 만들어 넣어주세요.`\n```ex) 2.1(X)  02.01(O)\n※한 번 등록한 생일은 변경할 수 없습니다.※\n생일이 잘못 입력된 것 같으면 퓨브#2222로 문의해주세요.```")
+                         .addField("`에이야 프사 [멘션]`", "맨션된 사람의 프로필 사진을 보여줍니다.");
                 }else if( msg.contains("가르치기") ){
                     embed.setTitle("에이봇에게 말 가르치기")
                          .addField("`에이야 배워 [커맨드]:[반응]`", "말을 가르칩니다.")
                          .addField("`에이야 잊어 [커맨드]`", "가르친 말을 잊게 합니다. 중복된 커맨드에 다른 대사 여러 개가\n동시에 DB에 존재하는 경우, `함께 전부 지워버리니` 주의해주세요.")
-                         .addField("키워드", "반응 문자열에 넣으면 해당 문자열로 치환하는 명령어(?)에 대한 설명입니다.\nex) 안녕하세요 $u님! => 안녕하세요 퓨브님!")
+                         .addField("키워드", "반응 문자열에 넣으면 해당 문자열로 치환하는 키워드에 대한 설명입니다.\nex) 안녕하세요 $u님! => 안녕하세요 퓨브님!")
                          .addField("$u", "메시지를 보낸 유저의 이름이 들어갑니다.")
-                         .addField("$t", "현재 시간이 오후/오전HH:mm 형식으로 들어갑니다.")
+                         .addField("$t", "현재 시간이 오전/오후HH:mm 형식으로 들어갑니다.")
                          .addField("$f", "임의의 음식 이름이 들어갑니다.")
-                         .addField("$a", "임의의 동물 이름이 들어갑니다.");
+                         .addField("$a", "임의의 동물 이름이 들어갑니다.")
+                         .addField("$c", "임의의 국가 이름이 들어갑니다.");
                 }else{
                     embed.setTitle("에이봇 리마스터")
                          .setDescription("원본 에이봇을 없애버리고 원본이 된 에이봇 리마스터")
@@ -220,39 +225,77 @@ public class AbotMain {
                     }
                 } catch( Exception e ){ e.printStackTrace(); }
             }
-            else if( msg.contains("생일") ){
+            else if( msg.contains("프사") ){
+                String replaced;
+                Color c = new Color( 196, 230, 145 );
+
+                embed.setColor( c );
+
                 try {
-                    String path = "D:\\somthing I made\\AbotRemaster_Maven\\Birthday.txt";
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(path, true));
-                    final PrintWriter pw = new PrintWriter(bw, true);
-                    String birthdayDate;
+                    replaced = msg.replace("에이야 프사", "");
+                    embed.setImage( api.getUserById(replaced.replaceAll("\\W", "")).get().getAvatar() );
+                    embed.setFooter(userName, message.getAuthor().getAvatar());
+                    embed.setTimestamp(Instant.now());
+                } catch( Exception e ){ e.printStackTrace(); }
 
-                    birthdayDate = msg.replace("에이야 생일 ", "");
-
-                    if ( dateCheck(birthdayDate, "MM.dd") ) {
+                channel.sendMessage( embed );
+            }
+            else if( msg.contains("생일") ){
+                if( msg.endsWith("생일") ){
+                    try {
+                        String path = "D:\\somthing I made\\AbotRemaster_Maven\\Birthday.txt";
                         BufferedReader br = new BufferedReader(new FileReader(path));
                         String buff;
-                        boolean isAlready = false;
+                        String[] splited;
+                        boolean isExist = false;
 
-                        while ((buff = br.readLine()) != null) {
-                            if (buff.contains( message.getAuthor().getIdAsString() ))
-                                isAlready = true;
-                            System.out.print(".");
+                        while( (buff = br.readLine()) != null ){
+                            if( buff.contains( message.getAuthor().getId() + "" ) ) {
+                                splited = buff.split("#");
+                                channel.sendMessage( userName + " 씨의 생일은 " + splited[0] + "(으)로 등록되어 있어요.\n만약 생일이 잘못 등록된 것 같으시면, \"퓨브#2222\"로 부탁드려요!" );
+                                isExist = true;
+                            }
                         }
+                        if( !isExist )
+                            channel.sendMessage(userName + " 씨의 생일은 등록되어 있지 않은 것 같네요..? 생일에 관한 내용은 \"에이야 도움말 기능\" 을 참고해주세요.");
+                    } catch( Exception e ) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    try {
+                        String path = "D:\\somthing I made\\AbotRemaster_Maven\\Birthday.txt";
+                        BufferedWriter bw = new BufferedWriter(new FileWriter(path, true));
+                        final PrintWriter pw = new PrintWriter(bw, true);
+                        String birthdayDate;
 
-                        if ( isAlready )
-                            channel.sendMessage(userName + " 씨의 생일은 이미 등록되어 있네요!\n만약 생일이 잘못 등록된 것 같으시면, \"퓨브#2222\"으로..");
-                        else {
-                            pw.write(birthdayDate + "#" + message.getAuthor().getId() + "\n");
-                            pw.flush();
-                            channel.sendMessage(birthdayDate + "...알겠어요! 잘 기억해 둘게요♬");
-                            pw.close();
-                            System.out.println(userName + " 씨의 생일을 데이터베이스에 저장했어요.");
-                        }
-                    } else
-                        ev.getChannel().sendMessage("에..그 날짜는 없는 날짜 같은데요..?");
-                } catch (Exception e) {
-                    e.printStackTrace();
+                        birthdayDate = msg.replace("에이야 생일 ", "");
+
+                        if (dateCheck(birthdayDate, "MM.dd")) {
+                            BufferedReader br = new BufferedReader(new FileReader(path));
+                            String buff;
+                            boolean isAlready = false;
+
+                            while ((buff = br.readLine()) != null) {
+                                if (buff.contains(message.getAuthor().getIdAsString()))
+                                    isAlready = true;
+                                System.out.print(".");
+                            }
+
+                            if (isAlready)
+                                channel.sendMessage(userName + " 씨의 생일은 이미 등록되어 있네요! \"에이야 생일\" 로 확인해 주세요.");
+                            else {
+                                pw.write(birthdayDate + "#" + message.getAuthor().getId() + "\n");
+                                pw.flush();
+                                channel.sendMessage(birthdayDate + "...알겠어요! 잘 기억해 둘게요♬");
+                                pw.close();
+                                System.out.println(userName + " 씨의 생일을 데이터베이스에 저장했어요.");
+                            }
+                        } else
+                            ev.getChannel().sendMessage("에..그 날짜는 없는 날짜 같은데요..?");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             else {
@@ -294,6 +337,7 @@ public class AbotMain {
                         replacedAns[0] = replacedAns[0].replace("$t", tm);
                         replacedAns[0] = replacedAns[0].replace("$f", getRandomFood( msg, ev ));
                         replacedAns[0] = replacedAns[0].replace("$a", getRandomAnimal( msg, ev ));
+                        replacedAns[0] = replacedAns[0].replace("$c", getRandomCountry( msg, ev ));
 
                         System.out.println("보낼 문자열: " + replacedAns[0]);
 
@@ -422,6 +466,30 @@ public class AbotMain {
         } catch ( Exception e ){ e.printStackTrace(); }
 
         return selectedAnim;
+    }
+
+    private static String getRandomCountry(String msg, MessageCreateEvent ev) {
+        int councnt=0;
+        String selectedCoun = null;
+
+        try {
+            List<String> coun = new ArrayList<String>();
+            String path = "D:\\somthing I made\\AbotRemaster_Maven\\Countrys.txt";
+            BufferedReader br = new BufferedReader(new FileReader(path));
+            String buff;
+
+            while( ( buff = br.readLine() ) != null ) {
+                coun.add(buff);
+                councnt++;
+                System.out.print(".");
+            }
+
+            System.out.println(councnt + "개의 항목을 리스트에 담는 데 성공했어요!");
+
+            selectedCoun = coun.get( (int)(Math.random()*(councnt)) );
+        } catch ( Exception e ){ e.printStackTrace(); }
+
+        return selectedCoun;
     }
 
     private static String getRandomFood(String msg, MessageCreateEvent ev) {
