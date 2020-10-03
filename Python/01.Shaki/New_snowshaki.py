@@ -1,3 +1,4 @@
+# region import
 import discord
 from discord.ext import commands
 
@@ -15,6 +16,8 @@ from const import Docs,Strings
 from web_find import SearchWord
 from custom_manger import command_manger
 from func import print_time, set_embed
+# endregion
+
 #from db_manger import  dbmanger
 
 
