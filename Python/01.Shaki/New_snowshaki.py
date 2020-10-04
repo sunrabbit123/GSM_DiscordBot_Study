@@ -14,19 +14,18 @@ import re
 from functools import partial
 from const import Docs,Strings
 from web_find import SearchWord
-from custom_manger import command_manger
 from funcs import print_time, set_embed, basic_command, custom_command
 # endregion
 
 #from db_manger import  dbmanger
 
-
+# region command
 def command_find(message,prefixed = True):
     diction = getattr(Strings,'command_prefixes' if prefixed else 'commands')
     for command, string in diction.items():
         if message in string:
             return command
-
+# endregion
 
 
 
@@ -94,7 +93,5 @@ class ShakiBot(commands.Bot):
                         else:
                             print("%s는 명령어가 아닙니다.(User : %s)\n" %(command,message.content))
                             return    
-    
-    
     
 
