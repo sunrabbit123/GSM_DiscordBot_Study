@@ -15,7 +15,6 @@ from .embed import set_embed
 from const import Docs, Strings
 from web_find import SearchWord
 class basic_command:
-
     @staticmethod
     async def command_help(message):
         emb = set_embed(message, title='깔롤랭은 국룰입니다.', description = Docs.help)

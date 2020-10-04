@@ -15,7 +15,7 @@ from functools import partial
 from const import Docs,Strings
 from web_find import SearchWord
 from custom_manger import command_manger
-from funcs import print_time, set_embed, basic_command
+from funcs import print_time, set_embed, basic_command, custom_command
 # endregion
 
 #from db_manger import  dbmanger
@@ -59,7 +59,11 @@ class ShakiBot(commands.Bot):
             except IndexError:
                 return
             
-            func = getattr(basic_command, "command_%s"%command_find(command, prefixed=prefixed),None)
+            func = getattr(basic_command
+                            if not command in Strings.command_prefixes['custom']
+                            else custom_command,
+                            "command_%s"%command_find(command, prefixed=prefixed),
+                            None)
 
             try:
                 print("%s : %s : %s" % (message.author,message.channel.name,message.content ))
@@ -71,7 +75,7 @@ class ShakiBot(commands.Bot):
                 if prefixed == False:
                     return
                 else:
-                    with open("snow_shaki_bot.txt","r",encoding='utf-8') as f:
+                    with open("./funcs/snow_shaki_bot.txt","r",encoding='utf-8') as f:
                         commands = list()
                         saying = message.content[2:]
                         
