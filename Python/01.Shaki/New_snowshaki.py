@@ -15,7 +15,7 @@ from functools import partial
 from const import Docs,Strings
 from web_find import SearchWord
 from custom_manger import command_manger
-from func import print_time, set_embed, basic_command
+from funcs import print_time, set_embed, basic_command
 # endregion
 
 #from db_manger import  dbmanger
@@ -59,7 +59,7 @@ class ShakiBot(commands.Bot):
             except IndexError:
                 return
             
-            func = getattr(self, "command_%s"%command_find(command, prefixed=prefixed),None)
+            func = getattr(basic_command, "command_%s"%command_find(command, prefixed=prefixed),None)
 
             try:
                 print("%s : %s : %s" % (message.author,message.channel.name,message.content ))
