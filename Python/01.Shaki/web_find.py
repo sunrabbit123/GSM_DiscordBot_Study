@@ -29,6 +29,7 @@ class SearchWord:
         except :
             print("검색불가")
             return None
+        
     def get_image(self,keyword):
         soup = HTMLGetter("https://www.google.co.kr/search?hl=en&tbm=isch&q=%s" % keyword).get_soup()
 
