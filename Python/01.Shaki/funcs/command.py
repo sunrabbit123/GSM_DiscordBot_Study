@@ -32,7 +32,7 @@ class basic_command:
     @staticmethod
     async def command_구글검색(message):
         findg = " ".join(message.content.split()[2:])
-        image = SearchWord().get_image(findg)
+        image = await SearchWord().get_image(findg)
 
         if image is None:
             await message.channel.send("이미지 불러오기를 실패했습니다")
@@ -45,7 +45,7 @@ class basic_command:
     @staticmethod
     async def command_사전검색(message):
         findn = " ".join(message.content.split()[2:])
-        findit = SearchWord().get_dic(findn)
+        findit = await SearchWord().get_dic(findn)
 
         if findit is None:
             await message.channel.send("사전검색이 실패했습니다.")
@@ -59,6 +59,7 @@ class basic_command:
     async def command_링크(message):
         await message.channel.send(Docs.url)
         await message.channel.send("여기 있어요,,,")
+
 class custom_command:
     @staticmethod
     async def command_잊어(message, db):#샤키야 key커맨드
