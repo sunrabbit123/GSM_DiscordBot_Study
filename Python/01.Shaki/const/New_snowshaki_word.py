@@ -22,3 +22,7 @@ class Strings:
 
 
     }
+    custom = [
+        '배워',
+        '잊어'
+    ]

@@ -58,7 +58,7 @@ class basic_command:
     
 class custom_command:
     @staticmethod
-    async def command_잊어(message):#샤키야 key커맨드
+    async def command_잊어(message, db):#샤키야 key커맨드
         forget_word = message.content[6:]
         with open('snow_shaki_bot.txt','w', encoding='utf-8') as save_word:
             with open('snow_shaki_bot.txt','r', encoding='utf-8') as read_word:
@@ -76,10 +76,10 @@ class custom_command:
         
     
     @staticmethod
-    async def command_배워(message) :#샤키야 key커맨드 value커맨드
-        word = message.content[7:].split(":")
-        with open('snow_shaki_bot.txt', 'a', encoding= 'utf-8') as ff:
-            ff.write('%s:;%s\n' % (word[0], word[1]))
+    async def command_배워(message : discord.Message, db) :#샤키야 배워 key커맨드 value커맨드
+        word = " ".join(message.content.split()[2:]).split(":")
+        db.command_insert(word[0], word[1], message.channel.name, message.author.name)
+        # key, value, server, user
         
         await message.channel.send("야랄 왜 나한테...")
 
