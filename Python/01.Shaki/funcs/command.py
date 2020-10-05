@@ -59,20 +59,11 @@ class basic_command:
 class custom_command:
     @staticmethod
     async def command_잊어(message, db):#샤키야 key커맨드
-        forget_word = message.content[6:]
-        with open('snow_shaki_bot.txt','w', encoding='utf-8') as save_word:
-            with open('snow_shaki_bot.txt','r', encoding='utf-8') as read_word:
-                lines = read_word.readlines()
-                for i in range(len(lines)):
-                    if lines[i] in forget_word:
-                        try:
-                            lines = lines[:i] + lines[i+1:]
-                        except IndexError:
-                            pass
-                save_word.writelines(lines)
+        key = message.content.split()[2]
+        result = db.command_delete(key)
 
-        await message.channel.send("?\n형신이세요? 알려주고 잊으라하네ㅔ,,,")
-        return
+        if result:
+            await message.channel.send("그게,,, 뭐죠,,,?")
         
     
     @staticmethod
