@@ -1,5 +1,5 @@
 import pymongo
-
+from random import choice
 import asyncio
 
 class custom_command:
@@ -14,13 +14,21 @@ class custom_command:
                             "user" : user})
         return True
     
-    def command_select(self, key) -> str:
-        result = self.collect.find({
+    def command_select(self, message) -> str:
+        key = ' '.join(message.content.split()[1:])
+        result = list(self.collect.find({
             "key-command" : key
-        })
-        print(result)
-    
+        },{
+            "_id" : False,
+            "key-command" : True,
+            "value-command" : True,
+            "server" : True,
+            "user" : True
+        }))
+        return result
+
     def command_delete(self, key) -> bool :
         self.collect.remove({
             "key-command" : key
         })
+        return True

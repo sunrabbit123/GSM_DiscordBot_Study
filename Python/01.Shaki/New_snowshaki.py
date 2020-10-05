@@ -82,24 +82,11 @@ class ShakiBot(commands.Bot):
                 if prefixed == False:
                     return
                 else:
-                    with open("./funcs/snow_shaki_bot.txt","r",encoding='utf-8') as f:
-                        commands = list()
-                        saying = message.content[2:]
-                        
-                        lines = f.readlines()
-                        print(lines)
-                        for line in lines:
-                            line_key = line.split(':;')[0]
-                            if line_key in saying:
-                                commands.append(line.split(':;')[1])
-
-                        if len(commands) >= 1:
-                            send_msg = random.choice(commands)
-                            await message.channel.send(send_msg)
-                            del commands
-                            return
-                        else:
-                            print("%s는 명령어가 아닙니다.(User : %s)\n" %(command,message.content))
-                            return    
+                    try:
+                        value_command = random.choice(self.db.command_select(message))
+                        await message.channel.send(value_command["value-command"])
+                    except IndexError:
+                        pass # 값이 없을 경우 choice가 불가능하기에 IndexError이 나타남
+                    return
     
 
