@@ -55,7 +55,10 @@ class basic_command:
                             title = f"{findn}의 네이버 사전검색 결과",
                             description = findit)
             await message.channel.send(embed = em)
-    
+    @staticmethod
+    async def command_링크(message):
+        await message.channel.send(Docs.url)
+        await message.channel.send("여기 있어요,,,")
 class custom_command:
     @staticmethod
     async def command_잊어(message, db):#샤키야 key커맨드
