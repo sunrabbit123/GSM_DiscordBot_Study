@@ -10,7 +10,7 @@ import re
 
 
 class HTMLGetter:
-    def __init__(self,url):
+    def __init__(self, url):
         self.url = url
 
     async def get_html(self):
@@ -18,12 +18,12 @@ class HTMLGetter:
             return (await cs.get(self.url))
         
     async def get_soup(self):
-        html= await self.get_html()
-        soup = BeautifulSoup(html,'html.parser')
-        return await soup
+        html = await self.get_html()
+        return BeautifulSoup(await html.read(),'html.parser')
+         
 
 class SearchWord:
-    async def get_dic(self,keyword):
+    async def get_dic(self, keyword):
         soup = await HTMLGetter("https://terms.naver.com/search.nhn?query=%s&searchType=&dicType=&subject="%keyword).get_soup()
         try :
             expl = soup.find('div' , class_ = "info_area").text
@@ -34,7 +34,7 @@ class SearchWord:
             print(e)
             return None
         
-    async def get_image(self,keyword):
+    async def get_image(self, keyword):
         soup = await HTMLGetter("https://www.google.co.kr/search?hl=en&tbm=isch&q=%s" % keyword).get_soup()
 
         try :
