@@ -58,13 +58,12 @@ class ShakiBot(commands.Bot):
                 prefixed = 1 if (command[0] in self.prefix) else  0
                 command = command[prefixed]
             except IndexError:
-                return
+                await message.channel.send("먀아,,,?")
             
             finded_command = command_find(command, prefixed = prefixed)
             command_type = finded_command not in Strings.custom
             # True == basic_command
             # False == custom_command
-
             extension = basic_command if command_type else custom_command
             
             func = None
