@@ -15,8 +15,10 @@ import re
 import pymongo
 from const import Docs,Strings
 from web_find import SearchWord
-from funcs import print_time, set_embed, basic_command, custom_command
+from funcs import basic_command, custom_command
 from model import custom_command as custom_db
+from utils import print_time, set_embed
+
 # endregion
 
 # region command
