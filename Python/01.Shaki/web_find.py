@@ -1,6 +1,7 @@
 import aiohttp
 import requests
 from bs4 import BeautifulSoup
+from urllib.parse import quote_plus
 
 import datetime
 import random
@@ -33,18 +34,23 @@ class SearchWord:
             print("검색불가")
             print(e)
             return None
-        
-    async def get_image(self, keyword):
-        soup = await HTMLGetter("https://www.google.co.kr/search?hl=en&tbm=isch&q=%s" % keyword).get_soup()
 
+    async def get_image(self, keyword):
+        soup = await HTMLGetter(f"https://www.google.co.kr/search?q={keyword}&source=lnms&tbm=isch").get_soup()
+        # https://www.google.co.kr/search?q=%EB%9D%BC%EC%9D%B4%EC%B8%84
+        print(soup)
         try :
             info = soup.find_all("img")
+            print(info)
+            print(len(info))
             index = random.randint(1, len(info))
             return info[index]["src"]
-        except:
+        except Exception as e:
+            print(e)
             return None
 
-    async def get_meal(self, plus_date = 0):
+    @staticmethod
+    async def get_meal(plus_date = 0):
         # region URL
         URL = "https://open.neis.go.kr/hub/mealServiceDietInfo?"\
             + "Type=json"\
