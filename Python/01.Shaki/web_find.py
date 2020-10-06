@@ -6,6 +6,7 @@ from urllib.parse import quote_plus
 import datetime
 import random
 
+import json
 import asyncio
 import re
 
@@ -60,11 +61,11 @@ class SearchWord:
 			+ "&ATPT_OFCDC_SC_CODE=F10"\
 			+ "&SD_SCHUL_CODE=7380292"
         date : str = str(datetime.datetime.now()).split()[0]
-        URL += "&MLSV_YMD" + re.sub("-", "", date)
+        URL += "&MLSV_YMD=" + re.sub("-", "", date)
         # endregion
-        soup = await HTMLGetter(URL).get_soup()
-
-        print(soup)
+        print(URL)
+        data = json.loads(await(await HTMLGetter(URL).get_html()).read())
+        return data["mealServiceDietInfo"][1]['row']
         
 
 

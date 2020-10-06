@@ -58,8 +58,23 @@ class basic_command:
     
     @staticmethod
     async def command_급식(message):
-        await SearchWord.get_meal()
+        word = message.content.split()[1:]
+        plus_date : int = 0
         
+        meal_list = await SearchWord.get_meal(plus_date = 0)
+        # meal_list[0] == 조식
+        # meal_list[1] == 중식
+        # meal_list[2] == 석식
+
+        meal_type = "조식" if "조식" in word or "아침" in word else\
+                    "중식" if "중식" in word or "점심" in word else\
+                    "석식" if "석식" in word or "저녁" in word or "저녘" in word else "급식"
+        # if meal_type is "급식", meal_list[0:3]
+        print(meal_type)
+        em = set_embed(message)
+        
+        
+
     @staticmethod
     async def command_링크(message):
         await message.channel.send(Docs.url)
