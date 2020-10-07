@@ -11,9 +11,10 @@ import operator
 import os
 import re
 
-from .embed import set_embed
+from utils import set_embed
 from const import Docs, Strings
 from web_find import SearchWord
+
 class basic_command:
     @staticmethod
     async def command_help(message):
@@ -60,7 +61,7 @@ class basic_command:
     async def command_급식(message):
         word = message.content.split()[1:]
         plus_date : int = 0
-        
+
         meal_list = await SearchWord.get_meal(plus_date = 0)
         # meal_list[0] == 조식
         # meal_list[1] == 중식

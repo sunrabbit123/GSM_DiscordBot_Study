@@ -16,19 +16,29 @@ class HTMLGetter:
         self.url = url
 
     async def get_html(self):
+        headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'}
+        print(headers)
         async with aiohttp.ClientSession() as cs:
-            return (await cs.get(self.url))
+            html = await cs.get(self.url, headers = headers)
+            return await html.text()
         
     async def get_soup(self):
         html = await self.get_html()
-        return BeautifulSoup(await html.read(),'html.parser')
+        try:
+            return BeautifulSoup(html,'html.parser')
+        except Exception as e:
+            print("error")
+            print(e)
          
 
 class SearchWord:
     async def get_dic(self, keyword):
+        
         soup = await HTMLGetter("https://terms.naver.com/search.nhn?query=%s&searchType=&dicType=&subject="%keyword).get_soup()
+        
         try :
             expl = soup.find('div' , class_ = "info_area").text
+            print(expl)
 
             return expl
         except Exception as e:
@@ -37,15 +47,15 @@ class SearchWord:
             return None
 
     async def get_image(self, keyword):
+        print(1)
         soup = await HTMLGetter(f"https://www.google.co.kr/search?q={keyword}&source=lnms&tbm=isch").get_soup()
         # https://www.google.co.kr/search?q=%EB%9D%BC%EC%9D%B4%EC%B8%84
-        print(soup)
+        print(4)
+        # print(soup, 4)
         try :
             info = soup.find_all("img")
-            print(info)
-            print(len(info))
             index = random.randint(1, len(info))
-            return info[index]["src"]
+            return info[index]["data-src"]
         except Exception as e:
             print(e)
             return None
