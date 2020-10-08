@@ -17,7 +17,6 @@ class HTMLGetter:
 
     async def get_html(self):
         headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'}
-        print(headers)
         async with aiohttp.ClientSession() as cs:
             html = await cs.get(self.url, headers = headers)
             return await html.text()
@@ -38,8 +37,6 @@ class SearchWord:
         
         try :
             expl = soup.find('div' , class_ = "info_area").text
-            print(expl)
-
             return expl
         except Exception as e:
             print("검색불가")
@@ -47,11 +44,8 @@ class SearchWord:
             return None
 
     async def get_image(self, keyword):
-        print(1)
         soup = await HTMLGetter(f"https://www.google.co.kr/search?q={keyword}&source=lnms&tbm=isch").get_soup()
         # https://www.google.co.kr/search?q=%EB%9D%BC%EC%9D%B4%EC%B8%84
-        print(4)
-        # print(soup, 4)
         try :
             info = soup.find_all("img")
             index = random.randint(1, len(info))
