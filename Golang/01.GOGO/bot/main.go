@@ -62,61 +62,58 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	if m.Author.Bot == true {
+		return
+	}
+
 	massage := m.Content
 
 	filter := strings.Fields(massage)
 
-	fmt.Println(s.State.User.Bot)
-
-	if s.State.User.Bot == true {
-
-		if string(filter[0]) == prefix {
-			var CReq string
-			_, err := db.Exec("SELECT CRes FROM command WHERE CReq = ?;", filter[1])
-			if err == nil {
-				rowErr := db.QueryRow("SELECT CRes FROM command WHERE CReq = ?;", filter[1]).Scan(&CReq)
-				if rowErr != nil {
-					panic(err.Error())
-				}
-				s.ChannelMessageSend(m.ChannelID, CReq)
-			} else {
-				s.ChannelMessageSend(m.ChannelID, "존재하지 않는 명령어입니다.")
+	if string(filter[0]) == prefix {
+		var CReq string
+		_, err := db.Exec("SELECT CRes FROM command WHERE CReq = ?;", filter[1])
+		if err == nil {
+			rowErr := db.QueryRow("SELECT CRes FROM command WHERE CReq = ?;", filter[1]).Scan(&CReq)
+			if rowErr != nil {
+				panic(err.Error())
 			}
+			s.ChannelMessageSend(m.ChannelID, CReq)
+		} else {
+			s.ChannelMessageSend(m.ChannelID, "존재하지 않는 명령어입니다.")
 		}
+	}
 
-		if string(filter[0]) == addCommand {
-			if filter[1] == "고" {
-				s.ChannelMessageSend(m.ChannelID, "고는 사용할 수 없습니다.")
-			} else if len(filter) == 2 {
-				s.ChannelMessageSend(m.ChannelID, "고커추 형식은 ```고커추 '명령어' '반응할 말'```입니다.")
-			} else {
-				_, err := db.Exec("INSERT INTO usercommand (CReq, CRes) VALUES (?, ?);", filter[1], strings.Join(filter[2:], " "))
-				if err != nil {
-					panic(err.Error())
-				}
-				s.ChannelMessageSend(m.ChannelID, "추가가 성공적으로 완료되었습니다.")
-			}
-		}
-
-		if string(filter[0]) == deleteCommand {
-			_, err := db.Exec("DELETE FROM usercommand WHERE CReq = ?;", strings.Join(filter[1:], " "))
+	if string(filter[0]) == addCommand {
+		if filter[1] == "고" {
+			s.ChannelMessageSend(m.ChannelID, "고는 사용할 수 없습니다.")
+		} else if len(filter) == 2 {
+			s.ChannelMessageSend(m.ChannelID, "고커추 형식은 ```고커추 '명령어' '반응할 말'```입니다.")
+		} else {
+			_, err := db.Exec("INSERT INTO usercommand (CReq, CRes) VALUES (?, ?);", filter[1], strings.Join(filter[2:], " "))
 			if err != nil {
 				panic(err.Error())
 			}
-			s.ChannelMessageSend(m.ChannelID, "삭제 완료!")
+			s.ChannelMessageSend(m.ChannelID, "추가가 성공적으로 완료되었습니다.")
 		}
+	}
 
-		var userCReq string
-		userCommand := m.Content
-		_, userCommandErr := db.Exec("SELECT CRes FROM usercommand WHERE CReq = ?;", userCommand)
-		if userCommandErr == nil {
-			userCommandErr2 := db.QueryRow("SELECT CRes FROM usercommand WHERE CReq = ?;", userCommand).Scan(&userCReq)
-			if userCommandErr2 != nil {
-				fmt.Println(err.Error())
-			}
-			s.ChannelMessageSend(m.ChannelID, userCReq)
+	if string(filter[0]) == deleteCommand {
+		_, err := db.Exec("DELETE FROM usercommand WHERE CReq = ?;", strings.Join(filter[1:], " "))
+		if err != nil {
+			panic(err.Error())
 		}
-	} else {
-		s.ChannelMessageSend(m.ChannelID, "우왕 봇이다")
+		s.ChannelMessageSend(m.ChannelID, "삭제 완료!")
+	}
+
+	var userCReq string
+	userCommand := m.Content
+	_, userCommandErr := db.Exec("SELECT CRes FROM usercommand WHERE CReq = ?;", userCommand)
+	if userCommandErr == nil {
+		userCommandErr2 := db.QueryRow("SELECT CRes FROM usercommand WHERE CReq = ?;", userCommand).Scan(&userCReq)
+		if userCommandErr2 != nil {
+			fmt.Println(err.Error())
+		}
+		s.ChannelMessageSend(m.ChannelID, userCReq)
 	}
 }
