@@ -1,0 +1,9 @@
+# JS node Module
+JS/**/node_modules/**
+JS/**/config.JS
+
+# bot token
+Java/**/token.txt
+JS/**/config.JS
+Python/01.Shaki/config.ini
+
