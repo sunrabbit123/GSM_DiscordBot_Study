@@ -28,14 +28,16 @@ public class Birthday implements Runnable{
                 while( (birthdayDate = br.readLine()) != null ){
                     String[] splited = birthdayDate.split("#");
 
-                    if( tm.equals(splited[0]) && !chk ){
+                    if( tm.equals(splited[0]) ){
                         api.getUserById(splited[1]).get().sendMessage("🎉<@" + splited[1] + ">" + "님, 생일 축하드려요! 오늘은 정말 좋은 하루 되시길 바랄게요!🎉");
                         System.out.println("유저님의 생일을 축하해 드렸어요!");
                         chk = true;
                     }
-                    System.out.println("날짜 비교 중이예요......");
                 }
-                Thread.sleep(86400000 );
+                if( chk ) {
+                    Thread.sleep(86400000);
+                    chk = false;
+                }
             }
         } catch( Exception e ){
             e.printStackTrace();
