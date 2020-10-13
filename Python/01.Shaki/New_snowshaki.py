@@ -55,12 +55,20 @@ class ShakiBot(commands.Bot):
     async def on_message(self, message : discord.Message):
         await self.wait_until_ready()
         if not message.author.bot:
+            # 봇이 아닐때만 작동
             command = message.content.lower().split()
+
             try:    
                 prefixed = 1 if (command[0] in self.prefix) else  0
+            except IndexError:
+                return
+            # 사진이면 리턴
+
+            try:
                 command = command[prefixed]
             except IndexError:
                 await message.channel.send("먀아,,,?")
+
             
             finded_command = command_find(command, prefixed = prefixed)
             command_type = finded_command not in Strings.custom
