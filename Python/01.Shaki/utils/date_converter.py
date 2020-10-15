@@ -57,14 +57,7 @@ def set_Fixed_Date(value : int, YMWD : str, date : datetime.datetime) -> datetim
         date.replace(year = value)
     return date
 
-        
-
-
-
-
-
-
-
+    
 class get_date:
     
 
@@ -118,7 +111,7 @@ class get_date:
 
 
     def format_date(self):
-        formatted = re.sub('[^0-9]', '', self.date.__str__.split("T")[0])
+        formatted = re.sub('[^0-9]', '', str(self.date.__str__()))[2:8]
         return formatted
     
         

@@ -11,7 +11,7 @@ import operator
 import os
 import re
 
-from utils import set_embed
+from utils import set_embed, get_date
 from const import Docs, Strings
 from web_find import SearchWord
 
@@ -60,9 +60,7 @@ class basic_command:
     @staticmethod
     async def command_급식(message):
         word = message.content.split()[1:]
-        plus_date : int = 0
-
-        meal_list = await SearchWord.get_meal(plus_date = 0)
+        meal_list = await SearchWord.get_meal(get_date(message).format_date())
         # meal_list[0] == 조식
         # meal_list[1] == 중식
         # meal_list[2] == 석식
@@ -71,8 +69,17 @@ class basic_command:
                     "중식" if "중식" in word or "점심" in word else\
                     "석식" if "석식" in word or "저녁" in word or "저녘" in word else "급식"
         # if meal_type is "급식", meal_list[0:3]
-        print(meal_type)
-        em = set_embed(message)
+        print(meal_list)
+        em = set_embed(message, title = f"{meal_type}입니다.")
+        try : 
+            if meal_type == "급식":
+                meal_type_list = ["조식", "중식", "석식"]
+                for i in range(0,3):
+                    meal = meal_list
+                    em.add_field(name = meal_type_list[i], value = meal[i])
+        except Exception as e:
+            print(e)
+        await message.channel.send(embed = em)
         
         
 
