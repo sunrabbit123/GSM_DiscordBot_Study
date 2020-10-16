@@ -64,23 +64,46 @@ class basic_command:
         # meal_list[0] == 조식
         # meal_list[1] == 중식
         # meal_list[2] == 석식
-
         meal_type = "조식" if "조식" in word or "아침" in word else\
                     "중식" if "중식" in word or "점심" in word else\
                     "석식" if "석식" in word or "저녁" in word or "저녘" in word else "급식"
-        # if meal_type is "급식", meal_list[0:3]
-        print(meal_list)
-        em = set_embed(message, title = f"{meal_type}입니다.")
-        try : 
+        meal = None
+        
+        em = set_embed(message, title = f"언젠가 들어갈 날짜")
+        try:
             if meal_type == "급식":
-                meal_type_list = ["조식", "중식", "석식"]
+                meal = list()
+                def meal_filtering(meal : str):
+                    meal = re.sub(pattern = '[^가-힣|</br>]',
+                                repl =  "", 
+                                string = str(meal))
+                    meal = "\n".join(meal.split("<br/>"))
+                    return meal
+
                 for i in range(0,3):
-                    meal = meal_list
-                    em.add_field(name = meal_type_list[i], value = meal[i])
+                    em.add_field(name = meal_list[i]['MMEAL_SC_NM'],
+                                value = meal_filtering(meal_list[i]['DDISH_NM']),
+                                inline = True)
+                print(meal)
+            else:
+                meal = meal_list[Strings.meal_dict[meal_type]]['DDISH_NM']
+                meal = re.sub(pattern = '[^가-힣|</br>]',
+                                repl =  "",
+                                string = str(meal))
+                print(meal)
+                meal = "\n".join(meal.split("<br/>"))  
+                em.add_field(name = meal_type, value = meal, inline = True)  
         except Exception as e:
             print(e)
+            pass
         await message.channel.send(embed = em)
         
+        # try : 
+        #     if meal_type == "급식":
+        #         meal_type_list = ["조식", "중식", "석식"]
+        #         for i in range(0,3):
+        #             meal = meal_list
+        #             em.add_field(name = meal_type_list[i], value = meal[i])
         
 
     @staticmethod
