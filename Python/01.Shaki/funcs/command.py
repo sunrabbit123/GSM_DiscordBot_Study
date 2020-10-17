@@ -60,16 +60,20 @@ class basic_command:
     @staticmethod
     async def command_급식(message):
         word = message.content.split()[1:]
-        meal_list = await SearchWord.get_meal(get_date(message).format_date())
+        dates = get_date(message)
+        meal_list = await SearchWord.get_meal(dates.url_date())
+        
+
         # meal_list[0] == 조식
         # meal_list[1] == 중식
         # meal_list[2] == 석식
+
         meal_type = "조식" if "조식" in word or "아침" in word else\
                     "중식" if "중식" in word or "점심" in word else\
                     "석식" if "석식" in word or "저녁" in word or "저녘" in word else "급식"
         meal = None
         
-        em = set_embed(message, title = f"언젠가 들어갈 날짜")
+        em = set_embed(message, title = f"{dates.strftime()}")
         try:
             if meal_type == "급식":
                 meal = list()
