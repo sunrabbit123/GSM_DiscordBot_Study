@@ -52,7 +52,6 @@ def set_Fixed_Date(value : int, YMWD : str, date : datetime.datetime) -> datetim
         date = date.replace(day = value * 7)
     elif YMWD == 'D':
         date = date.replace(day = value)
-        print(date.strftime("%Y %m %d"))
     elif YMWD == 'M':
         date = date.replace(month = value)
     elif YMWD == 'Y':
@@ -80,36 +79,37 @@ class get_date:
             YMWD = 'M' if pattern_Comparison(re.compile('[월|달]'), text) else\
                    ('W' if pattern_Comparison(re.compile('[주]'), text) else 'D')
                    
-            val = text.replace('[^0-9]', "")
+            val = re.sub('[^0-9]', "", text)
             self.date = set_date(text, YMWD, self.date, int(val))
 
         length = re.sub('[^다|저|지]', "", text)
         is_DMY = re.sub('[^주|달|해|년]', "", text)
-        is_Days_Dict = re.sub('[^열흘|스무날|보름|그믐]', "", text)
+        is_Days_Dict = re.sub(r'[^\b열흘\b|\b스무날\b|\b보름\b|\b그믐\b]', "", text)
         print("아흐레" in text)
         if is_DMY:
             print("DMY")
             self.date = set_date(text, Date_Dict[is_DMY[0]], self.date, length)
         elif is_Days_Dict:
-            self.date = set_date(text, Days_Dict[is_Days_Dict[0]], self.date, length)
+            self.date = set_date(text, 'D', self.date, Days_Dict[is_Days_Dict[0]])
             print("Days_Dict")
         else:
-            print("특수 일자")
             for i, j, k in zip(Strings.dateCentury, Strings.dateCenturyAbbr, range(0,10)):
-                if pattern_Comparison(re.compile(f'[{i}|{j}]'), text):
+                if pattern_Comparison(re.compile(rf'[\b{i}\b|\b{j}\b]'), text):
+                    print("특수 일자")
                     if pattern_Comparison(re.compile('[열]'), text):
                         self.date = set_Fixed_Date(k + 11, 'D', self.date)
-                    elif pattern_Comparison(re.compile('[스무]'), text):
+                    elif pattern_Comparison(re.compile(r'[\b스무\b]'), text):
                         self.date = set_Fixed_Date(k + 21, 'D', self.date)
                     else:
                         self.date = set_Fixed_Date(k + 1, 'D', self.date)
 
         for week, num in zip(Strings.week, range(0,7)):
-            if pattern_Comparison(re.compile(f'{week}요일'), text):
+            if f"{week}요일" in text:
                 print(int(self.date.day) - self.date.weekday() + num)
                 self.date = set_Fixed_Date(int(self.date.day) - self.date.weekday() + num, 'D', self.date)
                 print(self.date.day, self.date.weekday(), num)
                 print(self.date.strftime("%Y \t %m \t %d"))
+        print(self.date.strftime('%Y\t%m\t%d'))
 
                 
                 
