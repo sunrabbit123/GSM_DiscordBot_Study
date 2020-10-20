@@ -73,7 +73,8 @@ class get_date:
                         "그믐" : "30"}
         self.date = datetime.datetime.now()
 
-        if pattern_Comparison(re.compile('[일|월|달|주]'), text) and\
+        if pattern_Comparison(re.compile('[\b일 뒤\b|\b월|달|주]'), text) and\
+            pattern_Comparison(re.compile('[뒤]'), text) and\
             pattern_Comparison(re.compile('[0-9]'), text):
             print("일월달주")
             YMWD = 'M' if pattern_Comparison(re.compile('[월|달]'), text) else\
