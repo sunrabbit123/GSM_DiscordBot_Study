@@ -31,19 +31,17 @@ def plus_minus_date(date : datetime.datetime, YMWD, value : int) -> datetime.dat
             date -= datetime.timedelta(weeks = value)
     else :
         if value > 0:
-            date += datetime.timedelta(weeks = value)
+            date += datetime.timedelta(days = value)
         else :
             value *= value
-            date -= datetime.timedelta(weeks = value)  
+            date -= datetime.timedelta(days = value)  
     return date
 
 def set_date(text : str, YMWD : str, date : datetime.datetime, val : int = 1) -> datetime.datetime:
     if(pattern_Comparison(re.compile(r'(전|저|지)'), text)):
-        plus_minus_date(date, YMWD, val * -1)
-    elif(pattern_Comparison(re.compile(r'(후|뒤|다)'), text)):
-        plus_minus_date(date, YMWD, val)
+        date = plus_minus_date(date, YMWD, val * -1)
     else:
-        plus_minus_date(date, YMWD, val)
+        date = plus_minus_date(date, YMWD, val)
     return date
     
 
@@ -73,8 +71,7 @@ class get_date:
                         "그믐" : "30"}
         self.date = datetime.datetime.now()
 
-        if pattern_Comparison(re.compile('[\b일 뒤\b|\b월|달|주]'), text) and\
-            pattern_Comparison(re.compile('[뒤]'), text) and\
+        if pattern_Comparison(re.compile('[\b일 뒤\b|\b월 뒤\b|\b달 뒤\b|\b주 뒤\b]'), text) and\
             pattern_Comparison(re.compile('[0-9]'), text):
             print("일월달주")
             YMWD = 'M' if pattern_Comparison(re.compile('[월|달]'), text) else\
@@ -83,17 +80,25 @@ class get_date:
             val = re.sub('[^0-9]', "", text)
             self.date = set_date(text, YMWD, self.date, int(val))
 
+        for days, plus in Strings.dateExp.items():
+            if days in text:
+                print('내일 어제 등 : ', days)
+                print('plus :', plus, type(plus))
+                self.date = set_date(text, 'D', self.date, plus)
+                print(self.date.day)
         
         is_DMY = re.sub('[^주|달|해|년]', "", text)
         is_Days_Dict = re.sub(r'[^\b열흘\b|\b스무날\b|\b보름\b|\b그믐\b]', "", text)
-        print("아흐레" in text)
+
         if is_DMY:
             print("DMY")
             length = re.sub('[^다|저|지]', "", text)
             self.date = set_date(text, Date_Dict[is_DMY[0]], self.date, len(length))
+
         elif is_Days_Dict:
             self.date = set_date(text, 'D', self.date, Days_Dict[is_Days_Dict[0]])
             print("Days_Dict")
+
         else:
             for i, j, k in zip(Strings.dateCentury, Strings.dateCenturyAbbr, range(0,10)):
                 if pattern_Comparison(re.compile(rf'[\b{i}\b|\b{j}\b]'), text):

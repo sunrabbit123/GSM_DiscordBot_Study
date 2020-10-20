@@ -53,7 +53,6 @@ class ShakiBot(commands.Bot):
         print("야생의 샤키가 나타났다!")
 
    
-    @print_time
     async def on_message(self, message : discord.Message):
         await self.wait_until_ready()
         if not message.author.bot:
@@ -81,6 +80,7 @@ class ShakiBot(commands.Bot):
             func = None
             try:
                 func = getattr(extension, f"command_{finded_command}")
+                
                 print("%s : %s : %s" % (message.author, message.channel.name, message.content ))
             except (UnicodeEncodeError, AttributeError):
                 pass#유니코드 에러는 스킵, 해당 클래스에 해당 함수가 없어도 스킵
