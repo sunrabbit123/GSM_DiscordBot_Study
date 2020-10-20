@@ -82,13 +82,14 @@ class get_date:
             val = re.sub('[^0-9]', "", text)
             self.date = set_date(text, YMWD, self.date, int(val))
 
-        length = re.sub('[^다|저|지]', "", text)
+        
         is_DMY = re.sub('[^주|달|해|년]', "", text)
         is_Days_Dict = re.sub(r'[^\b열흘\b|\b스무날\b|\b보름\b|\b그믐\b]', "", text)
         print("아흐레" in text)
         if is_DMY:
             print("DMY")
-            self.date = set_date(text, Date_Dict[is_DMY[0]], self.date, length)
+            length = re.sub('[^다|저|지]', "", text)
+            self.date = set_date(text, Date_Dict[is_DMY[0]], self.date, len(length))
         elif is_Days_Dict:
             self.date = set_date(text, 'D', self.date, Days_Dict[is_Days_Dict[0]])
             print("Days_Dict")

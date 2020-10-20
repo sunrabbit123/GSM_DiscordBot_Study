@@ -13,7 +13,7 @@ import os
 import re
 
 import pymongo
-from const import Docs,Strings
+from const import Docs, Strings
 from web_find import SearchWord
 from funcs import basic_command, custom_command
 from model import custom_command as custom_db
@@ -22,7 +22,7 @@ from utils import print_time, set_embed
 # endregion
 
 # region command
-def command_find(message,prefixed = True):
+def command_find(message, prefixed = True):
     diction = getattr(Strings,'command_prefixes' if prefixed else 'commands')
     for command, string in diction.items():
         if message in string:
@@ -32,7 +32,7 @@ def command_find(message,prefixed = True):
 
 
 class ShakiBot(commands.Bot):
-    def __init__(self, db, *,debug = False, admin : str = '508788780002443284'):
+    def __init__(self, db, *, debug = False, admin : str = '508788780002443284'):
         self.debug = debug
         #self.dbmanger = dbmanger()
         self.prefix =["샤키야","참수진","수진아","Shaki","shaki"]
@@ -81,9 +81,17 @@ class ShakiBot(commands.Bot):
             func = None
             try:
                 func = getattr(extension, f"command_{finded_command}")
-                print("%s : %s : %s" % (message.author,message.channel.name,message.content ))
+                print("%s : %s : %s" % (message.author, message.channel.name, message.content ))
             except (UnicodeEncodeError, AttributeError):
                 pass#유니코드 에러는 스킵, 해당 클래스에 해당 함수가 없어도 스킵
+            if not func:
+                diction = getattr(Strings, 'meal')
+                for _command, string in diction.items():
+                    for meal_command in string:
+                        if meal_command in message.content:
+                            func = getattr(extension, 'command_급식')
+                            await func(message)
+                            return
             if func:
                 if command_type:
                     await func(message)
