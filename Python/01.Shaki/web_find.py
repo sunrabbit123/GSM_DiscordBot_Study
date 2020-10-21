@@ -70,7 +70,7 @@ class SearchWord:
         # endregion
         print(URL)
         data = json.loads(await HTMLGetter(URL).get_html())
-        return data["mealServiceDietInfo"][1]['row']
+        return data
         
 
 

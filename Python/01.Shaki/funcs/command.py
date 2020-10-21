@@ -61,8 +61,7 @@ class basic_command:
     async def command_급식(message):
         word = message.content.split()[1:]
         dates = get_date(message)
-        meal_list = await SearchWord.get_meal(dates.url_date())
-        
+        em = set_embed(message, title = f"{dates.strftime()}")
 
         # meal_list[0] == 조식
         # meal_list[1] == 중식
@@ -73,8 +72,9 @@ class basic_command:
                     "석식" if "석식" in word or "저녁" in word or "저녘" in word else "급식"
         meal = None
         
-        em = set_embed(message, title = f"{dates.strftime()}")
+        
         try:
+            meal_list = (await SearchWord.get_meal(dates.url_date()))["mealServiceDietInfo"][1]['row']
             if meal_type == "급식":
                 meal = list()
                 def meal_filtering(meal : str):
@@ -97,9 +97,8 @@ class basic_command:
                 print(meal)
                 meal = "\n".join(meal.split("<br/>"))  
                 em.add_field(name = meal_type, value = meal, inline = True)  
-        except Exception as e:
-            print(e)
-            pass
+        except KeyError:
+            em.add_field(name = "오류", value = "급식이 없습니다.")
         await message.channel.send(embed = em)
         
         # try : 
