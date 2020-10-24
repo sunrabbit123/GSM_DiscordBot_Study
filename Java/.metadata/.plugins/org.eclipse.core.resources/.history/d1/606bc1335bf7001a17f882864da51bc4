@@ -1,0 +1,90 @@
+package com.github.sunrabbit123.JavaBot;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import org.javacord.api.DiscordApi;
+import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
+
+import java.awt.*;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class Main {
+	
+	final static String token = "NzAwNjExMzg0OTk5NjczOTM2.XpldMg.EZ5a6LC0pdftpCdq2fH1ePyHl94";
+	final static String prefix = "라이츄";
+	
+    public static void main(String[] args) {
+        DiscordApi api = new DiscordApiBuilder()
+        		.setToken(token)
+        		.login()
+        		.join();
+        CheckTime ckt = new CheckTime( api );
+        
+        Thread th = new Thread( ckt );
+        
+        th.start();
+        
+        
+        
+        
+        System.out.println("Logged in!");
+        api.updateActivity("라이츄츄츄츄릅");
+        
+        
+        api.addMessageCreateListener(ev -> {
+        	
+        	EmbedBuilder embed = new EmbedBuilder();//임베드 생성
+        	
+        	String msg = ev.getMessage().getContent();
+            String userName = ev.getMessageAuthor().getName();
+            TextChannel Ch = ev.getChannel();
+            
+            if(msg.startsWith(prefix)){
+            	if(msg.startsWith("fkdlcb")) {
+            		Ch.sendMessage("라이츄는 한글밖에 모르는걸요!");
+            	}else if(msg.contains("굴러")) {
+            		int RandomNum = (int)(Math.random()*100);
+            		switch(RandomNum % 3){
+            		case 1: Ch.sendMessage("데구르르 데굴"); break;
+            		case 2: Ch.sendMessage("데구르르 데구르"); break;
+            		case 3: Ch.sendMessage("라이츄를 불러오는 중입니다....\n로딩중...."); break;
+            		}	
+            	}else if(msg.contains("주사위")) {
+            		int Rnum = (int)(Math.random()*10) % 7;
+            		Ch.sendMessage("데구르르.... " + Rnum + "이 나왔습니다..!");
+            	}else if(msg.contains("급식")) {
+            		Document doc = Jsoup.connect("https:// https://open.neis.go.kr/hub/mealServiceDietInfo\r\n").get();
+            	}
+            	
+            }
+        });
+    }
+
+}
+class CheckTime implements Runnable {
+    DiscordApi api;
+    boolean checked = false;
+    String targetTime = "16:33:00";
+
+    public CheckTime( DiscordApi api ) {
+        this.api = api;
+    }
+    public void run() {
+        while( true ) {
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+            Date time = new Date();
+            String tm = format.format(time);
+
+            if (tm.equals(targetTime)) {
+                //api.getTextChannelById("719449629963452449").get().sendMessage("테스트인거예요! " + tm + "이 되어서 메시지를 보냈어요!");
+            }
+        }
+    }
+}

@@ -1,0 +1,13 @@
+# JS node Module
+JS/**/node_modules/**
+JS/**/config.JS
+
+# bot token
+Java/**/token.txt
+JS/**/config.JS
+Python/01.Shaki/config.ini
+
+# ignore at Python
+Python/*/__pycache__
+Python/01.Shaki/*/__pycache__
+Python/*/*/*/__pycache__

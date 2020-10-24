@@ -1,0 +1,54 @@
+package com.github.sunrabbit123.JavaBot;
+
+import org.javacord.api.DiscordApi;
+import org.javacord.api.DiscordApiBuilder;
+
+import java.awt.*;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class Main {
+	
+	final static String token = "NzAwNjExMzg0OTk5NjczOTM2.XpldMg.EZ5a6LC0pdftpCdq2fH1ePyHl94";
+	
+    public static void main(String[] args) {
+        DiscordApi api = new DiscordApiBuilder()
+        		.setToken(token)
+        		.login()
+        		.join();
+        CheckTime ckt = new CheckTime( api );
+        
+        Thread th = new Thread( ckt );
+        
+        th.start();
+        
+        
+        
+        
+        System.out.println("Logged in!");
+    }
+
+}
+class CheckTime implements Runnable {
+    DiscordApi api;
+    boolean checked = false;
+    String targetTime = "16:33:00";
+
+    public CheckTime( DiscordApi api ) {
+        this.api = api;
+    }
+    public void run() {
+        while( true ) {
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+            Date time = new Date();
+            String tm = format.format(time);
+
+            if (tm.equals(targetTime)) {
+                //api.getTextChannelById("719449629963452449").get().sendMessage("테스트인거예요! " + tm + "이 되어서 메시지를 보냈어요!");
+            }
+        }
+    }
+}
