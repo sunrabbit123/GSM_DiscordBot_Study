@@ -11,7 +11,7 @@ import operator
 import os
 import re
 
-from utils import set_embed
+from utils import set_embed, get_date
 from const import Docs, Strings
 from web_find import SearchWord
 
@@ -60,9 +60,9 @@ class basic_command:
     @staticmethod
     async def command_급식(message):
         word = message.content.split()[1:]
-        plus_date : int = 0
+        dates = get_date(message)
+        em = set_embed(message, title = f"{dates.strftime()}")
 
-        meal_list = await SearchWord.get_meal(plus_date = 0)
         # meal_list[0] == 조식
         # meal_list[1] == 중식
         # meal_list[2] == 석식
@@ -70,10 +70,45 @@ class basic_command:
         meal_type = "조식" if "조식" in word or "아침" in word else\
                     "중식" if "중식" in word or "점심" in word else\
                     "석식" if "석식" in word or "저녁" in word or "저녘" in word else "급식"
-        # if meal_type is "급식", meal_list[0:3]
-        print(meal_type)
-        em = set_embed(message)
+        meal = None
         
+        
+        try:
+            meal_list = (await SearchWord.get_meal(dates.url_date()))["mealServiceDietInfo"][1]['row']
+            if meal_type == "급식":
+                meal = list()
+                def meal_filtering(meal : str):
+                    meal = re.sub(pattern = '[^가-힣|</br>]',
+                                repl =  "", 
+                                string = str(meal))
+                    meal = "\n".join(meal.split("<br/>"))
+                    return meal
+
+                for i in range(0,3):
+                    em.add_field(name = meal_list[i]['MMEAL_SC_NM'],
+                                value = meal_filtering(meal_list[i]['DDISH_NM']),
+                                inline = True)
+                print(meal)
+            else:
+                meal = meal_list[Strings.meal_dict[meal_type]]['DDISH_NM']
+                meal = re.sub(pattern = '[^가-힣|</br>]',
+                                repl =  "",
+                                string = str(meal))
+                print(meal)
+                meal = "\n".join(meal.split("<br/>"))  
+                em.add_field(name = meal_type, value = meal, inline = True)  
+        except KeyError:
+            em.add_field(name = "오류", value = "급식이 없습니다.")
+        except IndexError:
+            print("저녁까지밖에 없음")
+        await message.channel.send(embed = em)
+        
+        # try : 
+        #     if meal_type == "급식":
+        #         meal_type_list = ["조식", "중식", "석식"]
+        #         for i in range(0,3):
+        #             meal = meal_list
+        #             em.add_field(name = meal_type_list[i], value = meal[i])
         
 
     @staticmethod

@@ -10,6 +10,8 @@ import json
 import asyncio
 import re
 
+from utils import get_date
+
 
 class HTMLGetter:
     def __init__(self, url):
@@ -55,7 +57,7 @@ class SearchWord:
             return None
 
     @staticmethod
-    async def get_meal(plus_date = 0):
+    async def get_meal(date : str):
         # region URL
         URL = "https://open.neis.go.kr/hub/mealServiceDietInfo?"\
             + "Type=json"\
@@ -64,12 +66,11 @@ class SearchWord:
             + "&pSize=100"\
 			+ "&ATPT_OFCDC_SC_CODE=F10"\
 			+ "&SD_SCHUL_CODE=7380292"
-        date : str = str(datetime.datetime.now()).split()[0]
-        URL += "&MLSV_YMD=" + re.sub("-", "", date)
+        URL += "&MLSV_YMD=" + date
         # endregion
         print(URL)
-        data = json.loads(await(await HTMLGetter(URL).get_html()).read())
-        return data["mealServiceDietInfo"][1]['row']
+        data = json.loads(await HTMLGetter(URL).get_html())
+        return data
         
 
 
