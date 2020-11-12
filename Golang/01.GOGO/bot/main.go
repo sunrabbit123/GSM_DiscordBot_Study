@@ -52,7 +52,7 @@ func startBot() {
 
 
 func command(s *discordgo.Session, m *discordg.MessageCreate) {
-	db, err := sql.pen("mysql", account.Account)
+	db, err := sql.Open("mysql", account.Account)
 	if err != nil {
 		anic(err.Error())
 	}
@@ -61,7 +61,7 @@ func command(s *discordgo.Session, m *discordg.MessageCreate) {
 	}()
 	defer db.Close()
 	if m.Auhor.ID == s.State.User.ID {
-		eturn
+		return
 }
 
 if m.Auhor.Bot == true {
