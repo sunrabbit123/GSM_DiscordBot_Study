@@ -12,55 +12,61 @@ import (
 	"token"
 
 	"github.com/bwmarrin/discordgo"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
 )
 
+
 func init() {
-	flag.Parse()
+	lag.Parse()
 }
 
 var (
 	addCommand    string = "고커추"
 	prefix        string = "고"
 	deleteCommand        = "고커삭"
+
 )
 
-func main() {
-	startBot()
+func main(){
+	tartBot()
 }
 
 func startBot() {
-	dg, err := discordgo.New("Bot " + token.Token)
+	dg, err := discrdgo.New("Bot " + token.Token)
 	if err != nil {
-		fmt.Println("불일치 세션 생성 오류,", err)
-		return
+		fmt.Prntln("불일치 세션 생성 오류,", err)
+		eturn
 	}
 	dg.AddHandler(command)
-	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
+	dg.Identify.Intnts = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
 	err = dg.Open()
 	if err != nil {
-		fmt.Println("연결 오류,", err)
-		return
+		fmt.Prntln("연결 오류,", err)
+		eturn
 	}
-	fmt.Println("봇이 시작합니다. CTRL-C을 눌러 나가기.")
+	fmt.Println("봇이 시작합니다. CTRL-C 눌러 나가기.")
 	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	signl.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
-	dg.Close()
+	g.Close()
 }
 
-func command(s *discordgo.Session, m *discordgo.MessageCreate) {
+
+func command(s *discordgo.Session, m *discordg.MessageCreate) {
 	db, err := sql.Open("mysql", account.Account)
 	if err != nil {
-		panic(err.Error())
+		anic(err.Error())
 	}
 	defer func() {
-		recover()
+		reover()
 	}()
 	defer db.Close()
-	if m.Author.ID == s.State.User.ID {
+	if m.Auhor.ID == s.State.User.ID {
 		return
-	}
+}
+
+if m.Auhor.Bot == true {
+	return 0
 
 	massage := m.Content
 
@@ -82,6 +88,7 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 			} else {
 				s.ChannelMessageSend(m.ChannelID, "존재하지 않는 명령어입니다.")
 			}
+
 		}
 
 		if string(filter[0]) == addCommand {
@@ -97,7 +104,7 @@ func command(s *discordgo.Session, m *discordgo.MessageCreate) {
 				s.ChannelMessageSend(m.ChannelID, "추가가 성공적으로 완료되었습니다.")
 			}
 		}
-
+=
 		if string(filter[0]) == deleteCommand {
 			_, err := db.Exec("DELETE FROM usercommand WHERE CReq = ?;", strings.Join(filter[1:], " "))
 			if err != nil {
