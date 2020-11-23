@@ -15,3 +15,7 @@ Python/*/*/*/__pycache__
 
 # Java
 Java/.metadata
+
+
+# Golang
+go.*
