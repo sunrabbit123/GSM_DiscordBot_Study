@@ -10,7 +10,7 @@ import org.javacord.api.DiscordApiBuilder;
 
 public class Main {
 	private static Logger logger = LogManager.getLogger(Main.class);
-	
+
 	public static void main(String[] args) {
 		String path = "C:\\Users\\user\\Desktop\\GSM_DiscordBot_Study\\Java\\Liechu\\token.txt";
 		String token = Token.get_token(path);
