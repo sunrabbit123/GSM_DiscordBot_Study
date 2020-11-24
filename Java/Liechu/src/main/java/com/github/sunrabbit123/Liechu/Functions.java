@@ -8,6 +8,7 @@ public class Functions implements MessageCreateListener{
 
 	final static String prefix = "¶óÀÌÃò";
 	
+	@Override
 	public void onMessageCreate(MessageCreateEvent ev) {
 		Message msg = ev.getMessage();
 		
@@ -20,7 +21,7 @@ public class Functions implements MessageCreateListener{
 		if( content.contains("±¼·¯") ) {
 			roll(msg);
 		}else if( content.contains("±Ş½Ä") ){
-		
+			
 		}else if( content.contains("ÁÖ»çÀ§") ) {
 			dice(msg);
 		}
