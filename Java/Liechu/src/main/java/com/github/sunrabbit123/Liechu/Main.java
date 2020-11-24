@@ -14,7 +14,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		String path = "C:\\Users\\user\\Desktop\\GSM_DiscordBot_Study\\Java\\Liechu\\token.txt";
-		String token = Token.get_token(path);
+		String token = Token.getToken(path);
 		DiscordApi api = new DiscordApiBuilder()
 				.setToken(token)
 				.login().join();
@@ -33,7 +33,7 @@ public class Main {
 }
 
 class Token {
-	static String get_token(String path) {
+	static String getToken(String path) {
 		String prv = null;
 		
 		try {
