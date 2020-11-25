@@ -1,4 +1,4 @@
-package com.github.sunrabbit123.Liechu;
+package com.github.sunrabbit123.Liechu_bot;
 
 import java.awt.Color;
 import java.util.Date;

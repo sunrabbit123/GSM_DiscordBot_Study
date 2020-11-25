@@ -1,8 +1,32 @@
-package com.github.sunrabbit123.Liechu;
+package com.github.sunrabbit123.Liechu_bot;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
+
+
+class StcFunc{
+	public static void logPrint( String content ) {
+		SimpleDateFormat fNow = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
+		Date tNow = new Date();
+		
+		String ftNow = fNow.format( tNow );
+		
+		System.out.println("[LOG " + ftNow + "] : " + content);
+	}
+	
+	public static void chatPrint( String content ) {
+		SimpleDateFormat fNow = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
+		Date tNow = new Date();
+		
+		String ftNow = fNow.format( tNow );
+		
+		System.out.println("[Chat " + ftNow + "] : " + content);
+	}
+}
 
 public class Functions implements MessageCreateListener{
 
@@ -49,4 +73,5 @@ public class Functions implements MessageCreateListener{
 	}
 
 }
+
 
