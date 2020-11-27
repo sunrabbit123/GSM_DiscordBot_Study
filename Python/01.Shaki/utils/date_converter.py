@@ -62,7 +62,7 @@ def set_Fixed_Date(value : int, YMWD : str, date : datetime.datetime) -> datetim
 class get_date:
     def __init__(self, message : discord.Message ):
         text = ' '.join(message.content.split()[1:])
-        print(text)
+
         Date_Dict = {   "주" : 'W',
                         "달" : 'M',
                         "해" : 'Y',
@@ -91,7 +91,7 @@ class get_date:
         if is_DMY:
             length = re.sub('[^다|저|지]', "", text)
             self.date = set_date(text, Date_Dict[is_DMY[0]], self.date, len(length))
-
+        #TODO 지지난주 -> 4주 전으로 체크됨
         elif is_Days_Dict:
             try:
                 self.date = set_date(text, 'D', self.date, Days_Dict[is_Days_Dict[0]])
@@ -113,15 +113,10 @@ class get_date:
         for week, num in zip(Strings.week, range(0,7)):
             if f"{week}요일" in text:
                 self.date = set_Fixed_Date(int(self.date.day) - self.date.weekday() + num, 'D', self.date)
-    
-
-                
-                
-
-
+        #TODO 토요일부터는 다음주의 급식을 출력
 
     def strftime(self):
-        formatted = self.date.strftime('%Y년 %m월 %d일')
+        formatted = self.date.strftime('%Y년 %m월 %d일')# TODO 요일도 추가
         return formatted
 
 
