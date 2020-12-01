@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.javacord.api.entity.Icon;
@@ -33,24 +34,23 @@ class DateConverter{
 			{"그글피", "4"}
 	};
 	
-	
 	DateConverter(String content){
 		SimpleDateFormat fNow = new SimpleDateFormat("yyyyMMdd");
 		Calendar cal = Calendar.getInstance();
 		String text = content.replace("라이츄 ", "");
 		
-		if(Pattern.compile("([1-9])(일 뒤)").matcher(text).find()){
-			int plus = Integer.parseInt(text.replaceAll("[^1-9]", ""));
+		if(Pattern.compile("([0-9])+(일 뒤)").matcher(text).find()){
+			int plus = Integer.parseInt(text.replaceAll("[^0-9]", ""));
 			cal.add(cal.DATE, plus);
 		}
 		
-		if(Pattern.compile("([1-9])(주 뒤)").matcher(text).find()){
-			int plus = Integer.parseInt(text.replaceAll("[^1-9]", ""));
+		if(Pattern.compile("([0-9])+(주 뒤)").matcher(text).find()){
+			int plus = Integer.parseInt(text.replaceAll("[^0-9]", ""));
 			cal.add(cal.DATE, plus*7);
 		}
 		
-		if(Pattern.compile("([1-9])(달 뒤|월 뒤)").matcher(text).find()) {
-			int plus = Integer.parseInt(text.replaceAll("[^1-9]", ""));
+		if(Pattern.compile("([0-9])+(달 뒤|월 뒤)").matcher(text).find()) {
+			int plus = Integer.parseInt(text.replaceAll("[^0-9]", ""));
 			cal.add(cal.MONTH, plus);
 		}
 		
@@ -63,7 +63,8 @@ class DateConverter{
 		}
 		
 		if(Pattern.compile("(주)").matcher(text).find()) {
-			int length = getCount("^[전저지다]", text);
+			int length = getCount("[^전저지다]", text);
+
 			if(Pattern.compile("(다)").matcher(text).find()) {
 				cal.add(cal.DATE, length*7);
 			} else {
@@ -71,7 +72,7 @@ class DateConverter{
 			}
 		}
 		if(Pattern.compile("(달)").matcher(text).find()) {
-			int length = getCount("^[전저지다]", text);
+			int length = getCount("[^전저지다]", text);
 			if(Pattern.compile("(다)").matcher(text).find()) {
 				cal.add(cal.MONTH, length*7);
 			} else {
@@ -79,12 +80,27 @@ class DateConverter{
 			}
 		}
 		if(Pattern.compile("(해|년)").matcher(text).find()) {
-			int length = getCount("^[전저지다]", text);
+			int length = getCount("[^전저지다]", text);
 			if(Pattern.compile("(다)").matcher(text).find()) {
 				cal.add(cal.YEAR, length*7);
 			} else {
 				cal.add(cal.YEAR, length*-7);
 			}
+		}
+
+		Matcher matches = Pattern.compile("(.요일)").matcher(text);
+		if(matches.find()) {
+			String mch = matches.group(0).replaceAll("요일", "");
+			
+			String[] week = {"일", "월", "화", "수", "목", "금", "토"};
+			for(int i = 0; i < week.length; i++) {
+				if(mch.equals(week[i])) {
+					cal.add(cal.DATE, (cal.get(Calendar.DAY_OF_WEEK) * -1) + i + 1 );
+					break;
+				}
+				
+			}
+			
 		}
 		
 		this.YMD = new Date(cal.getTimeInMillis());
@@ -93,7 +109,7 @@ class DateConverter{
 	public int getCount(String pattern, String text) { return text.replaceAll(pattern, "").length(); }
 	public String getYMD() { return this.fymd; }
 	public String getKYMD() {
-		SimpleDateFormat fNow = new SimpleDateFormat("yyyy년 MM월 dd일");
+		SimpleDateFormat fNow = new SimpleDateFormat("yyyy년 MM월 dd일 E요일");
 		return fNow.format(this.YMD);
 	}
 }
@@ -116,7 +132,7 @@ public class Meal_GSM {
 	
 	public void getMeal(String content) {
 		DateConverter MLSVYMD = new DateConverter(content);
-		String urls = URL + "&MLSV_YMD=" + "20201125";//MLSVYMD.getYMD();
+		String urls = URL + "&MLSV_YMD=" + MLSVYMD.getYMD();
 		System.out.println(MLSVYMD.getYMD());
 		this.embed.setTitle(MLSVYMD.getKYMD());
 		
@@ -138,31 +154,55 @@ public class Meal_GSM {
 		}
 		
 		System.out.println(urls);
-		int mealCount = Integer.parseInt((
-				(JSONObject)(
-						(JSONArray)(
-								(JSONObject)(
-										(JSONArray)obj.get("mealServiceDietInfo")
-										).get(0)
-								).get("head")
-						).get(0)
-				).get("list_total_count").toString());
+		int mealCount = 0;
+		try {
+			mealCount = Integer.parseInt((
+					(JSONObject)(
+							(JSONArray)(
+									(JSONObject)(
+											(JSONArray)obj.get("mealServiceDietInfo")
+											).get(0)
+									).get("head")
+							).get(0)
+					).get("list_total_count").toString());
+		} catch(java.lang.NullPointerException e) {
+			System.out.println("없는급식");
+		}
 		
-		JSONArray info = (JSONArray)(
-							(JSONObject)(
-									(JSONArray)obj.get("mealServiceDietInfo")
-									).get(1)
-							).get("row");
 		
 		System.out.println(mealCount + "개의 급식이 검색되었습니다.");
-		for(int i = 0; i < mealCount; i++) {
-			JSONObject mealType = (JSONObject) info.get(i);
+		if(mealCount != 0) {
+			JSONArray info = (JSONArray)(
+					(JSONObject)(
+							(JSONArray)obj.get("mealServiceDietInfo")
+							).get(1)
+					).get("row");
+			String mealTarget = content.contains("조식") || content.contains("아침") ? "조식" :
+								(content.contains("중식") || content.contains("점심")? "중식" : 
+								(content.contains("석식") || content.contains("저녁") ? "석식" : ""));
 			
-			String fieldTitle = mealType.get("MMEAL_SC_NM").toString();
-			String fieldDesc = mealType.get("DDISH_NM").toString();
-			fieldDesc = fieldDesc.replaceAll("[*0-9./]", "");
-			fieldDesc = fieldDesc.replaceAll(" ", "\n");
-			embed.addInlineField(fieldTitle, fieldDesc);
+			if(mealTarget.equals("")) {
+				for(int i = 0; i < mealCount; i++) {
+					JSONObject mealType = (JSONObject) info.get(i);
+					
+					String fieldTitle = mealType.get("MMEAL_SC_NM").toString();
+					String fieldDesc = mealType.get("DDISH_NM").toString();
+					fieldDesc = fieldDesc.replaceAll("[*0-9./]", "");
+					fieldDesc = fieldDesc.replaceAll(" ", "\n");
+					embed.addInlineField(fieldTitle, fieldDesc);
+				}
+			}else {
+				int mealSequence = mealTarget.equals("조식") ? 0 : 
+									(mealTarget.equals("중식") ? 1 : 2);
+				JSONObject mealType = (JSONObject) info.get(mealSequence);
+				String fieldTitle = mealType.get("MMEAL_SC_NM").toString();
+				String fieldDesc = mealType.get("DDISH_NM").toString();
+				fieldDesc = fieldDesc.replaceAll("[*0-9./]", "");
+				fieldDesc = fieldDesc.replaceAll(" ", "\n");
+				embed.addInlineField(fieldTitle, fieldDesc);
+			}
+		} else {
+			embed.addInlineField("오류", "급식이 없습니다.");
 		}
 
 	}
