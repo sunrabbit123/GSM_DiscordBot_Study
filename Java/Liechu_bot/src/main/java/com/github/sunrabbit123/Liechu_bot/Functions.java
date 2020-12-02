@@ -46,6 +46,8 @@ public class Functions implements MessageCreateListener{
 			content = content.replace("라이츄 ", "");
 			if( content.contains("굴러") ) {
 				roll(msg);
+			}else if( content.contains("골라")) {
+				choice(msg);
 			}else if( content.contains("급식") ||
 					content.contains("아침") ||
 					content.contains("조식") ||
@@ -86,6 +88,11 @@ public class Functions implements MessageCreateListener{
 		Meal_GSM mealMsg = new Meal_GSM(ev.getMessageAuthor().getName(), ev.getMessageAuthor().getAvatar());
 		mealMsg.getMeal(ev.getMessageContent());
 		ev.getMessage().getChannel().sendMessage(mealMsg.getEmbed());
+	}
+	private static void choice(Message msg) {
+		String[] text = msg.getContent().replaceAll("골라 ", "").split(",");
+		String choiced = text[getRand(text.length)];
+		msg.getChannel().sendMessage("제가 고른건.... " + choiced + "입니다!");
 	}
 }
 

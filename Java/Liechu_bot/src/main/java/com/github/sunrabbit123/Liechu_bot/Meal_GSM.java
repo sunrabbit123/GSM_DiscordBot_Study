@@ -177,11 +177,11 @@ public class Meal_GSM {
 							(JSONArray)obj.get("mealServiceDietInfo")
 							).get(1)
 					).get("row");
-			String mealTarget = content.contains("조식") || content.contains("아침") ? "조식" :
-								(content.contains("중식") || content.contains("점심")? "중식" : 
-								(content.contains("석식") || content.contains("저녁") ? "석식" : ""));
+			int mealTarget = content.contains("조식") || content.contains("아침") ? 1 :
+								(content.contains("중식") || content.contains("점심")? 2 : 
+								(content.contains("석식") || content.contains("저녁") ? 3 : 0));
 			
-			if(mealTarget.equals("")) {
+			if(mealTarget == 0) {
 				for(int i = 0; i < mealCount; i++) {
 					JSONObject mealType = (JSONObject) info.get(i);
 					
@@ -192,9 +192,7 @@ public class Meal_GSM {
 					embed.addInlineField(fieldTitle, fieldDesc);
 				}
 			}else {
-				int mealSequence = mealTarget.equals("조식") ? 0 : 
-									(mealTarget.equals("중식") ? 1 : 2);
-				JSONObject mealType = (JSONObject) info.get(mealSequence);
+				JSONObject mealType = (JSONObject) info.get(mealTarget);
 				String fieldTitle = mealType.get("MMEAL_SC_NM").toString();
 				String fieldDesc = mealType.get("DDISH_NM").toString();
 				fieldDesc = fieldDesc.replaceAll("[*0-9./]", "");
