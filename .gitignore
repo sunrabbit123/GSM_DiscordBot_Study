@@ -15,7 +15,7 @@ Python/*/*/*/__pycache__
 
 # Java
 Java/.metadata
-
+Java/Liechu_bot/account.txt
 
 # Golang
 go.*

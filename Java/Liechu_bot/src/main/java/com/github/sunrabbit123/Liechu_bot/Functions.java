@@ -41,13 +41,24 @@ public class Functions implements MessageCreateListener{
 		String content = msg.getContent();
 		StcFunc.chatPrint(ev.getMessageAuthor().getName() + " : " + content);
 		
-		if( !content.startsWith(prefix)) { return; }
+		if( !content.startsWith(prefix)) { 
+			String res = ((new CommandManager()).SelectCommand(content));
+			if(res.startsWith("¸Ï¾Æ,,,?") || res.startsWith("ÀÌÃò,,,?")) {
+				return;
+			} else {
+				msg.getChannel().sendMessage(res);
+			}
+		}
 		else {
 			content = content.replace("¶óÀÌÃò ", "");
 			if( content.contains("±¼·¯") ) {
 				roll(msg);
 			}else if( content.contains("°ñ¶ó")) {
 				choice(msg);
+			}else if( content.contains("ÀØ¾î") ) {
+				forget(msg);
+			}else if( content.contains("¹è¿ö") ) {
+				learn(msg);
 			}else if( content.contains("±Ş½Ä") ||
 					content.contains("¾ÆÄ§") ||
 					content.contains("Á¶½Ä") ||
@@ -61,6 +72,8 @@ public class Functions implements MessageCreateListener{
 				meal(ev);
 			}else if( content.contains("ÁÖ»çÀ§") ) {
 				dice(msg);
+			}else {
+				customCommand(msg);
 			}
 			
 		
@@ -94,6 +107,27 @@ public class Functions implements MessageCreateListener{
 		String choiced = text[getRand(text.length)];
 		msg.getChannel().sendMessage("Á¦°¡ °í¸¥°Ç.... " + choiced + "ÀÔ´Ï´Ù!");
 	}
+	private static void learn(Message msg) {
+		String[] content = msg.getContent().replaceAll("¶óÀÌÃò ¹è¿ö ", "").split(":");
+		String key = content[0];
+		String value = content[1];
+		String server = msg.getServer().toString().replaceAll("Optional\\[", "").replaceAll("\\]", "");
+		String publisher = msg.getUserAuthor().toString().replaceAll("Optional\\[", "").replaceAll("\\]", "");
+		
+		msg.getChannel().sendMessage((new CommandManager()).InsertCommand(server, key, value, publisher));
+		
+	}
+	private static void forget(Message msg) {
+		String key = msg.getContent().replaceAll("¶óÀÌÃò ÀØ¾î ", "");
+		
+		msg.getChannel().sendMessage((new CommandManager()).DeleteCommand(key));
+	}
+	private static void customCommand(Message msg) {
+		String key = msg.getContent().replaceAll("¶óÀÌÃò ", "");
+		String res = ((new CommandManager()).SelectCommand(key));
+		msg.getChannel().sendMessage(res);
+	}
 }
+
 
 

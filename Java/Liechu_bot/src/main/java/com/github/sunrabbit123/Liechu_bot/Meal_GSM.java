@@ -177,11 +177,11 @@ public class Meal_GSM {
 							(JSONArray)obj.get("mealServiceDietInfo")
 							).get(1)
 					).get("row");
-			int mealTarget = content.contains("조식") || content.contains("아침") ? 1 :
-								(content.contains("중식") || content.contains("점심")? 2 : 
-								(content.contains("석식") || content.contains("저녁") ? 3 : 0));
+			int mealTarget = content.contains("조식") || content.contains("아침") ? 0 :
+								(content.contains("중식") || content.contains("점심")? 1 : 
+								(content.contains("석식") || content.contains("저녁") ? 2 : 3));
 			
-			if(mealTarget == 0) {
+			if(mealTarget == 3) {
 				for(int i = 0; i < mealCount; i++) {
 					JSONObject mealType = (JSONObject) info.get(i);
 					
