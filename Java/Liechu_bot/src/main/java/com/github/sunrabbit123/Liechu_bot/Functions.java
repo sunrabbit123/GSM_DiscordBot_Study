@@ -1,11 +1,16 @@
 package com.github.sunrabbit123.Liechu_bot;
 
+import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
+
+
 
 
 class StcFunc{
@@ -31,7 +36,7 @@ class StcFunc{
 public class Functions implements MessageCreateListener{
 
 	final static String prefix = "라이츄";
-	
+	final static String musicPrefix = "!";
 	@Override
 	public void onMessageCreate(MessageCreateEvent ev) {
 		Message msg = ev.getMessage();
@@ -40,16 +45,35 @@ public class Functions implements MessageCreateListener{
 
 		String content = msg.getContent();
 		StcFunc.chatPrint(ev.getMessageAuthor().getName() + " : " + content);
-		
-		if( !content.startsWith(prefix)) { 
+		if( content.startsWith(musicPrefix)) {
+			String keyword = content.replaceAll("!", "");
+			
+			if(keyword.equals("재생") || keyword.equals("ㅈ")) {
+				ServerVoiceChannel channel = ev.getMessageAuthor().getConnectedVoiceChannel().get();
+				channel.connect().thenAccept(aC -> {
+					ev.getChannel().sendMessage(new EmbedBuilder()
+							.setDescription(aC.getChannel().getName() + "에 연결했어요!")
+							.setColor(Color.GREEN));
+				}).exceptionally(e -> {
+					ev.getChannel().sendMessage("아고고 채널에 먼저 연결해주세요");
+					e.printStackTrace();
+					return null;
+				});
+			} else if(keyword.equals("나가") || keyword.equals("퇴출") || keyword.equals("ㅌ") || keyword.equals("ㄴ") || keyword.equals("퇴장")) {
+				ev.getServer().get().getAudioConnection().get().close();
+				ev.getChannel().sendMessage(new EmbedBuilder()
+						.setDescription("안녕히 계세요 여러분~\n 전 이 세상의 모든 굴레와 속박을\n벗어던지고 제 행복을 찾아 떠납니다~")
+						.setColor(Color.RED));
+					
+			}
+		} else if( !content.startsWith(prefix)) { 
 			String res = ((new CommandManager()).SelectCommand(content));
 			if(res.startsWith("먀아,,,?") || res.startsWith("이츄,,,?")) {
 				return;
 			} else {
 				msg.getChannel().sendMessage(res);
 			}
-		}
-		else {
+		} else {
 			content = content.replace("라이츄 ", "");
 			if( content.contains("굴러") ) {
 				roll(msg);
