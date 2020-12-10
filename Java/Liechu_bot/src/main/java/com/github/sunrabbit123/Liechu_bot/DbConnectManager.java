@@ -3,7 +3,7 @@ package com.github.sunrabbit123.Liechu_bot;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-public class ConnectManager {
+public class DbConnectManager {
 
 	public static Connection makeCon() {
 		// TODO Auto-generated method stub

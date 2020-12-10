@@ -136,14 +136,8 @@ public class Meal_GSM {
 		System.out.println(MLSVYMD.getYMD());
 		this.embed.setTitle(MLSVYMD.getKYMD());
 		
-		Document doc = null;
-		try {
-			doc = Jsoup.connect(urls).get();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		String doctext = StcFunc.parseText(urls);
 		
-		String doctext = doc.text();
 		JSONParser p = new JSONParser();
 		JSONObject obj = null;
 		
