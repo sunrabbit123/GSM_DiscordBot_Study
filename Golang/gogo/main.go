@@ -28,6 +28,10 @@ func init() {
 }
 
 func main() {
+	startBot()
+}
+
+func startBot() {
 	dg, err := discordgo.New("Bot " + os.Getenv("Token"))
 	if err != nil {
 		fmt.Println("error creating Discord session,", err)
@@ -50,6 +54,7 @@ func main() {
 	<-sc
 
 	dg.Close()
+	
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
