@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bwmarrin/discordgo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -70,37 +69,37 @@ func SelectCommand(client *mongo.Client, content string) string {
 	return req
 }
 
-//SelectAll Later Todo
-func SelectAll (client *mongo.Client, content string, s *discordgo.Session, m *discordgo.MessageCreate) {
-	coll := client.Database("gogo").Collection("userCommand")
-	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+// //SelectAll Later Todo
+// func SelectAll (client *mongo.Client, content string, s *discordgo.Session, m *discordgo.MessageCreate) {
+// 	coll := client.Database("gogo").Collection("userCommand")
+// 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 
-	var results []bson.M
+// 	var results []bson.M
 
-	cursor, err := coll.Find(ctx, bson.M{})
-	if err != nil {
-    log.Fatal(err)
-	}
+// 	cursor, err := coll.Find(ctx, bson.M{})
+// 	if err != nil {
+//     log.Fatal(err)
+// 	}
 
-	if err = cursor.All(ctx, &results); err != nil {
-    log.Fatal(err)
-	}
+// 	if err = cursor.All(ctx, &results); err != nil {
+//     log.Fatal(err)
+// 	}
 
-	//go루틴으로 고치기
-	for i, result := range results {
-		fmt.Println(i, result)
-		res := result["res"]
-		req := result["req"]
+// 	//go루틴으로 고치기
+// 	for i, result := range results {
+// 		fmt.Println(i, result)
+// 		res := result["res"]
+// 		req := result["req"]
 
-		res = res.(string)
-		req = req.(string)
+// 		res = res.(string)
+// 		req = req.(string)
 
-		fmt.Sprint([] int (s)) 
+// 		fmt.Sprint([] int (s)) 
 
-		s.ChannelMessageSend(m.ChannelID, result)
-		fmt.Printf("%d번째 커맨드 %s : %s\n", i+1, res, req)
-	}
+// 		s.ChannelMessageSend(m.ChannelID, result)
+// 		fmt.Printf("%d번째 커맨드 %s : %s\n", i+1, res, req)
+// 	}
 	
 
-	fmt.Println(results)
-}
+// 	fmt.Println(results)
+// }
