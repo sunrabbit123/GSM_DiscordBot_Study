@@ -44,8 +44,7 @@ func DeleteCommand(client *mongo.Client, content string) {
 	}
 }
 
-//얼
-func SelectCommand(client *mongo.Client, content string, s *discordgo.Session, m *discordgo.MessageCreate) {
+func SelectCommand(client *mongo.Client, content string) string {
 	coll := client.Database("gogo").Collection("userCommand")
 
 	var result map[string]string
@@ -65,10 +64,43 @@ func SelectCommand(client *mongo.Client, content string, s *discordgo.Session, m
 		fmt.Println("데이터 조회에 성공하였습니다.")
 		fmt.Printf("조회 커맨드| %s : %s", content, req)
 		fmt.Println()
-		s.ChannelMessageSend(m.ChannelID, req)
+		
 	}
+
+	return req
 }
 
-func SelectAll (client *mongo.Client, content string) {
-	//모든 명령어 검색
+//SelectAll Later Todo
+func SelectAll (client *mongo.Client, content string, s *discordgo.Session, m *discordgo.MessageCreate) {
+	coll := client.Database("gogo").Collection("userCommand")
+	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+
+	var results []bson.M
+
+	cursor, err := coll.Find(ctx, bson.M{})
+	if err != nil {
+    log.Fatal(err)
+	}
+
+	if err = cursor.All(ctx, &results); err != nil {
+    log.Fatal(err)
+	}
+
+	//go루틴으로 고치기
+	for i, result := range results {
+		fmt.Println(i, result)
+		res := result["res"]
+		req := result["req"]
+
+		res = res.(string)
+		req = req.(string)
+
+		fmt.Sprint([] int (s)) 
+
+		s.ChannelMessageSend(m.ChannelID, result)
+		fmt.Printf("%d번째 커맨드 %s : %s\n", i+1, res, req)
+	}
+	
+
+	fmt.Println(results)
 }
