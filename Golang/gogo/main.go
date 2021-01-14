@@ -53,6 +53,17 @@ func main() {
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
+	// 문자 판단
+	content := strings.Fields(m.Content)
+	userCommand := strings.Join(content[1:], " ")
+
+	if content[0] != "고" && 
+	content[0] != "ㄱ" && 
+	content[0] != "고커추" && 
+	content[0] != "고커삭" {
+		return
+	}
+
 	//db 연결
 	fmt.Println("연결 시작")
 
@@ -81,11 +92,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	content := strings.Fields(m.Content)
-	userCommand := strings.Join(content[1:], " ")
-
-	fmt.Println(content[0])
-
 	if userCommand == "ping" {
 		s.ChannelMessageSend(m.ChannelID, "Pong!")
 		return
@@ -96,16 +102,19 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if userCommand == "목록" {
-		db.SelectAll(client, userCommand)
-	}
+	// if userCommand == "목록" {
+	// 	db.SelectAll(client, userCommand, s, m)
+	// 	return
+	// }
 
 	switch(content[0]) {
 	case "고": 
-		db.SelectCommand(client, userCommand, s, m)
+		req := db.SelectCommand(client, userCommand)
+		s.ChannelMessageSend(m.ChannelID, req)
 		break
 	case "ㄱ": 
-		db.SelectCommand(client, userCommand, s, m)
+		req := db.SelectCommand(client, userCommand)
+		s.ChannelMessageSend(m.ChannelID, req)
 		break
 	case "고커추": 
 		db.InsertCommand(client, content[1:])
@@ -115,6 +124,4 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	default:
 		return
 	}
-
-	// fmt.Println(userCommand)
 }
