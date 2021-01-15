@@ -97,12 +97,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if userCommand == "ping" {
+	if userCommand == "ping" && content[0] == "ㄱ" && content[0] == "고"{
 		s.ChannelMessageSend(m.ChannelID, "Pong!")
 		return
 	}
 
-	if userCommand == "pong" {
+	if userCommand == "pong" && content[0] == "ㄱ" && content[0] == "고"{
 		s.ChannelMessageSend(m.ChannelID, "Ping!")
 		return
 	}
@@ -116,16 +116,18 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	case "고": 
 		req := db.SelectCommand(client, userCommand)
 		s.ChannelMessageSend(m.ChannelID, req)
-		break
+		return
 	case "ㄱ": 
 		req := db.SelectCommand(client, userCommand)
 		s.ChannelMessageSend(m.ChannelID, req)
-		break
+		return
 	case "고커추": 
 		db.InsertCommand(client, content[1:])
+		return
 	case "고커삭":
-		db.DeleteCommand(client, userCommand)
-		break
+		req := db.SelectCommand(client, userCommand)
+		s.ChannelMessageSend(m.ChannelID, req)
+		return
 	default:
 		return
 	}
