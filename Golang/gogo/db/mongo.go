@@ -35,11 +35,7 @@ func DeleteCommand(client *mongo.Client, content string) string {
 	_, err := coll.DeleteOne(ctx, bson.M{"res": content})
 
 	if err != nil{
-		if err == nil {
-			return "해당 명령어가 존재하지 않아요!"
-		} else {
-			fmt.Println(err.Error())
-		}
+		fmt.Println(err.Error())
 	}
 	fmt.Println("데이터 삭제에 성공하였습니다.")
 	fmt.Printf("삭제 커맨드| %s", content)
@@ -62,11 +58,7 @@ func SelectCommand(client *mongo.Client, content string) string {
 	req := result["req"]
 
 	if err != nil{
-		if err == nil {
-			return "해당 명령어가 존재하지 않아요!"
-		} else {
-			fmt.Println(err)
-		}
+		fmt.Println(err)
 	}
 	fmt.Println("데이터 조회에 성공하였습니다.")
 	fmt.Printf("조회 커맨드| %s : %s", content, req)

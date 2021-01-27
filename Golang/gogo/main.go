@@ -54,7 +54,6 @@ func startBot() {
 	<-sc
 
 	dg.Close()
-	
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
