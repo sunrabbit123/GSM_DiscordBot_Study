@@ -92,18 +92,18 @@ class ShakiBot(commands.Bot):
                             func = getattr(extension, "command_급식")
                             await func(message)
                             return
+            # 해당 메서드가 있을 때
             if func:
                 if command_type:
                     await func(message)
                 else:
                     await func(message, self.db)
+            # 해당 메서드가 없다면
             else:
-                if prefixed == False:
-                    return
-                else:
+                if prefixed == True:
                     try:
                         value_command = random.choice(self.db.command_select(message))
                         await message.channel.send(value_command["value-command"])
                     except IndexError:
                         pass  # 값이 없을 경우 choice가 불가능하기에 IndexError이 나타남
-                    return
+                return
