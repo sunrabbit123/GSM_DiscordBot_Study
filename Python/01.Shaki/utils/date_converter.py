@@ -1,8 +1,7 @@
-import discord
-
 import datetime
-import re
 from pytz import timezone
+import discord
+import re
 
 from const import Strings
 
@@ -75,13 +74,17 @@ class get_date:
         self.date = datetime.datetime.now(timezone("Asia/Seoul"))
 
         if pattern_Comparison(
-            re.compile(r"\b일 뒤\b|\b월 뒤\b|\b달 뒤\b|\b주 뒤\b"), text
+            re.compile(r"일 뒤\b|월 뒤\b|달 뒤\b|주 뒤\b|연 뒤\b|년 뒤\b"), text
         ) and pattern_Comparison(re.compile("[0-9]"), text):
 
             YMWD = (
                 "M"
                 if pattern_Comparison(re.compile("[월|달]"), text)
-                else ("W" if pattern_Comparison(re.compile("[주]"), text) else "D")
+                else (
+                    "W"
+                    if pattern_Comparison(re.compile("[주]"), text)
+                    else ("D" if pattern_Comparison(re.compile("[일]"), text) else "Y")
+                )
             )
 
             val = re.sub("[^0-9]", "", text)
@@ -95,7 +98,6 @@ class get_date:
         is_Days_Dict = re.sub(r"[^\b열흘\b|\b스무날\b|\b보름\b|\b그믐\b]", "", text)
         if is_DMY:
             length = re.sub("[^다|저|지|전]", "", text)
-            print(len(length))
             self.date = set_date(text, Date_Dict[is_DMY[0]], self.date, len(length))
         # TODO 지지난주 -> 4주 전으로 체크됨
         elif is_Days_Dict:
